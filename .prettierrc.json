@@ -7,7 +7,7 @@
     "jsxBracketSameLine": false,
     "plugins": [
         "./node_modules/prettier-plugin-sort-json",
-        "./node_modules/prettier-plugin-organize-imports"
+        "./node_modules/prettier-plugin-packagejson"
     ],
     "printWidth": 100,
     "singleQuote": true,
