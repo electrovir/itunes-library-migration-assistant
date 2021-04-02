@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-    <message>
-        <to>Alice</to>
-        <from>Bob</from>
-        <heading color="blue">Hello</heading>
-        <body color="red">This is a demo!</body>
-    </message>
+<message>
+    <to>Alice</to>
+    <from>Bob</from>
+    <heading color="blue">Hello</heading>
+    <body color="red">
+        This is a demo!
+    </body>
+</message>
