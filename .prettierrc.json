@@ -6,6 +6,7 @@
     "jsonRecursiveSort": true,
     "jsxBracketSameLine": false,
     "plugins": [
+        "./node_modules/prettier-plugin-organize-imports",
         "./node_modules/prettier-plugin-sort-json",
         "./node_modules/prettier-plugin-packagejson"
     ],

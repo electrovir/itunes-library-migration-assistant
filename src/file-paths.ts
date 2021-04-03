@@ -7,3 +7,9 @@ export function getSampleFilePath(relativeToSampleDirPath: string): string {
 
     return path;
 }
+
+export function getOutputFilePath(relativeToOutputDirPath: string): string {
+    const path = join(repoRoot, 'output', relativeToOutputDirPath);
+
+    return path;
+}

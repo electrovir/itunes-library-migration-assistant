@@ -1,7 +1,7 @@
-import {createReadStream, createWriteStream} from 'fs';
+import {createReadStream, createWriteStream, readFileSync, unlinkSync} from 'fs';
 import {createStream, QualifiedTag, Tag} from 'sax';
 import {testGroup} from 'test-vir';
-import {getSampleFilePath} from '../file-paths';
+import {getOutputFilePath, getSampleFilePath} from '../file-paths';
 
 testGroup({
     description: 'simple sax usage',
@@ -212,30 +212,29 @@ testGroup({
         });
         runTest({
             description: 'should be able to stream to a file',
-            expect: 1,
+            expect: readFileSync(getSampleFilePath('test-stream-to-file.comparison.txt'))
+                .toString()
+                .trim(),
             test: async () => {
-                return new Promise<number>((resolve, reject) => {
-                    const lines: Record<string, string>[] = [];
-                    let i = 0;
-                    let done = false;
-                    const outputStream = createWriteStream('someFile.txt', {flags: 'w'});
-
-                    function write(data: string) {
-                        if (done) {
-                            outputStream.close();
-                        }
-                        outputStream.write(data);
-                    }
+                /**
+                 * I'm pretty sure this is NOT SAFE to use for large files. It does not handle back
+                 * pressure or forward pressure. It is merely a simple example.
+                 */
+                return new Promise<string>((resolve, reject) => {
+                    const outputPath = getOutputFilePath('test-stream-to-file.txt');
+                    const outputStream = createWriteStream(outputPath, {flags: 'w'});
 
                     const saxStream = createStream(true);
-                    const nodes: (Tag | QualifiedTag)[] = [];
 
                     saxStream.on('opentag', (node) => {
-                        write(node.name);
+                        outputStream.write(node.name + '\n');
                     });
 
                     saxStream.on('end', () => {
-                        done = true;
+                        outputStream.close();
+                        const fileContents = readFileSync(outputPath).toString();
+                        unlinkSync(outputPath);
+                        resolve(fileContents.trim());
                     });
 
                     saxStream.on('error', (error) => {
@@ -248,9 +247,6 @@ testGroup({
                     });
 
                     stream.pipe(saxStream);
-
-                    outputStream.close();
-                    resolve(0);
                 });
             },
         });
