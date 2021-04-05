@@ -3,6 +3,7 @@
     <to>Alice</to>
     <from>Bob</from>
     <heading color="blue">Hello</heading>
+
     <body color="red">
         This is a demo!
     </body>
