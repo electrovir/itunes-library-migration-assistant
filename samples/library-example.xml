@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>Major Version</key>
+        <integer>-1</integer>
+        <key>Minor Version</key>
+        <integer>-1</integer>
+        <key>Application Version</key>
+        <string>0.0.0.0</string>
+        <key>Date</key>
+        <date>1970-01-01T00:00:00.000Z</date>
+        <key>Features</key>
+        <integer>-1</integer>
+        <key>Show Content Ratings</key>
+        <true />
+        <key>Library Persistent ID</key>
+        <string>XXX</string>
+        <key>Tracks</key>
+        <dict>
+            <key>1</key>
+            <dict>
+                <key>Track ID</key>
+                <integer>1</integer>
+                <key>Size</key>
+                <integer>111111</integer>
+                <key>Total Time</key>
+                <integer>111</integer>
+                <key>Year</key>
+                <integer>1970</integer>
+                <key>BPM</key>
+                <integer>11</integer>
+                <key>Date Modified</key>
+                <date>1970-01-01T00:00:00.000Z</date>
+                <key>Date Added</key>
+                <date>1970-01-01T00:00:00.000Z</date>
+                <key>Bit Rate</key>
+                <integer>256</integer>
+                <key>Sample Rate</key>
+                <integer>44100</integer>
+                <key>Play Count</key>
+                <integer>111</integer>
+                <key>Play Date</key>
+                <integer>0</integer>
+                <key>Play Date UTC</key>
+                <date>1970-01-01T00:00:00.000Z</date>
+                <key>Skip Count</key>
+                <integer>0</integer>
+                <key>Skip Date</key>
+                <date>1970-01-01T00:00:00.000Z</date>
+                <key>Rating</key>
+                <integer>100</integer>
+                <key>Album Rating</key>
+                <integer>100</integer>
+                <key>Album Rating Computed</key>
+                <true />
+                <key>Persistent ID</key>
+                <string>XXXX</string>
+                <key>Track Type</key>
+                <string>File</string>
+                <key>File Type</key>
+                <integer>-1</integer>
+                <key>File Folder Count</key>
+                <integer>0</integer>
+                <key>Library Folder Count</key>
+                <integer>0</integer>
+                <key>Name</key>
+                <string>Sample Song 1</string>
+                <key>Artist</key>
+                <string>Same Artist 1</string>
+                <key>Album Artist</key>
+                <string>Sample Album Artist 1</string>
+                <key>Composer</key>
+                <string>Sample Composer 1</string>
+                <key>Album</key>
+                <string>Sample Album 1</string>
+                <key>Genre</key>
+                <string>Sample Genre 1</string>
+                <key>Kind</key>
+                <string>AAC audio file</string>
+                <key>Location</key>
+                <string>file:///Volumes/sample/path/sample1.m4a</string>
+            </dict>
+            <key>2</key>
+            <dict>
+                <key>Track ID</key>
+                <integer>2</integer>
+                <key>Size</key>
+                <integer>222222</integer>
+                <key>Total Time</key>
+                <integer>2222</integer>
+                <key>Year</key>
+                <integer>1970</integer>
+                <key>BPM</key>
+                <integer>22</integer>
+                <key>Date Modified</key>
+                <date>1970-01-01T00:00:00.000Z</date>
+                <key>Date Added</key>
+                <date>1970-01-01T00:00:00.000Z</date>
+                <key>Bit Rate</key>
+                <integer>256</integer>
+                <key>Sample Rate</key>
+                <integer>44100</integer>
+                <key>Play Count</key>
+                <integer>222</integer>
+                <key>Play Date</key>
+                <integer>0</integer>
+                <key>Play Date UTC</key>
+                <date>1970-01-01T00:00:00.000Z</date>
+                <key>Skip Count</key>
+                <integer>0</integer>
+                <key>Skip Date</key>
+                <date>1970-01-01T00:00:00.000Z</date>
+                <key>Rating</key>
+                <integer>100</integer>
+                <key>Album Rating</key>
+                <integer>100</integer>
+                <key>Album Rating Computed</key>
+                <true />
+                <key>Persistent ID</key>
+                <string>XXXX</string>
+                <key>Track Type</key>
+                <string>File</string>
+                <key>File Type</key>
+                <integer>-1</integer>
+                <key>File Folder Count</key>
+                <integer>0</integer>
+                <key>Library Folder Count</key>
+                <integer>0</integer>
+                <key>Name</key>
+                <string>Sample Song 2</string>
+                <key>Artist</key>
+                <string>Same Artist 2</string>
+                <key>Album Artist</key>
+                <string>Sample Album Artist 2</string>
+                <key>Composer</key>
+                <string>Sample Composer 2</string>
+                <key>Album</key>
+                <string>Sample Album 2</string>
+                <key>Genre</key>
+                <string>Sample Genre 2</string>
+                <key>Kind</key>
+                <string>AAC audio file</string>
+                <key>Location</key>
+                <string>file:///Volumes/sample/path/sample2.m4a</string>
+            </dict>
+        </dict>
+        <key>Playlists</key>
+        <array>
+            <dict>
+                <key>Master</key>
+                <true />
+                <key>Playlist ID</key>
+                <integer>123</integer>
+                <key>Playlist Persistent ID</key>
+                <string>XXX</string>
+                <key>All Items</key>
+                <true />
+                <key>Visible</key>
+                <false />
+                <key>Name</key>
+                <string>Library</string>
+                <key>Playlist Items</key>
+                <array>
+                    <dict>
+                        <key>Track ID</key>
+                        <integer>1</integer>
+                    </dict>
+                    <dict>
+                        <key>Track ID</key>
+                        <integer>2</integer>
+                    </dict>
+
+                </array>
+            </dict>
+            <dict>
+                <key>Playlist ID</key>
+                <integer>124</integer>
+                <key>Playlist Persistent ID</key>
+                <string>XXXXXX</string>
+                <key>Distinguished Kind</key>
+                <integer>-1</integer>
+                <key>All Items</key>
+                <true />
+                <key>Name</key>
+                <string>Downloaded</string>
+                <key>Smart Info</key>
+                <data>
+                    AAA
+                </data>
+                <key>Smart Criteria</key>
+                <data>
+                    AAAA
+                </data>
+                <key>Playlist Items</key>
+                <array>
+                    <dict>
+                        <key>Track ID</key>
+                        <integer>1</integer>
+                    </dict>
+                    <dict>
+                        <key>Track ID</key>
+                        <integer>2</integer>
+                    </dict>
+                </array>
+            </dict>
+        </array>
+    </dict>
+</plist>

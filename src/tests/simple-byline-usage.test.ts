@@ -147,6 +147,7 @@ testGroup({
                         try {
                             output.push(`${saxParser.tag.name}:${text}`);
                         } catch (error) {
+                            // test errors out here
                             reject(error);
                         }
                     };
