@@ -26,7 +26,6 @@ testGroup({
 
                 const parserOptions: Partial<X2jOptions> = {
                     tagValueProcessor: (value: any): string => {
-                        console.log('value:', value);
                         return value;
                     },
                 } as const;

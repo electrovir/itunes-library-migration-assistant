@@ -2,6 +2,7 @@ import {convertToJson, X2jOptions} from 'fast-xml-parser';
 import {createReadStream, existsSync, readFileSync} from 'fs';
 import * as sax from 'sax';
 import {testGroup} from 'test-vir';
+import * as txml from 'txml';
 import {parseStringPromise} from 'xml2js';
 import {getOutputFilePath} from '../file-paths';
 
@@ -103,6 +104,21 @@ testGroup((runTest) => {
 
             const diff = endTime - startTime;
             console.log('xml2js time milliseconds', diff);
+        },
+    });
+    runTest({
+        description: 'read the whole file into txml',
+        /**
+         * Xml2js gives us a full json object that we can actually use (as it preserves order) but
+         * it is the slowest I've tried so far at 6-8 seconds for my library
+         */
+        test: () => {
+            const startTime = Number(new Date());
+            const libraryJson = txml.parse(readFileSync(libraryPath).toString());
+            const endTime = Number(new Date());
+
+            const diff = endTime - startTime;
+            console.log('txml time milliseconds', diff);
         },
     });
 });

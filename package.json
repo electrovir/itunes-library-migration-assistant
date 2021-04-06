@@ -21,7 +21,7 @@
     "scripts": {
         "prepublishOnly": "npm run test && npm run spellcheck",
         "test:full": "npm run test && npm run spellcheck && npm run format:check",
-        "test": "tsc && test-vir \"./**/!(*.type).test.js\"",
+        "test": "rm -rf dist && tsc && test-vir \"./**/!(*.type).test.js\"",
         "spellcheck": "cspell --no-progress --unique \"./**/*\"",
         "format": "prettier --ignore-path .gitignore --write  \"./**/*.{ts,css,html,json}\"",
         "format:check": "prettier --ignore-path .gitignore --check  \"./**/*.{ts,css,html,json}\""
@@ -30,6 +30,7 @@
         "byline": "^5.0.0",
         "fast-xml-parser": "^3.19.0",
         "sax": "^1.2.4",
+        "txml": "^4.0.1",
         "xml2js": "^0.4.23"
     },
     "devDependencies": {

@@ -1,5 +1,18 @@
 {
-    "ignorePaths": ["node_modules/**", "package-lock.json", "dist/**"],
     "version": "0.1",
-    "words": ["accum", "closetag", "electrovir", "onopentag", "ontext", "opentag", "packagejson"]
+    "ignorePaths": [
+        "node_modules/**",
+        "package-lock.json",
+        "dist/**"
+    ],
+    "words": [
+        "accum",
+        "closetag",
+        "electrovir",
+        "onopentag",
+        "ontext",
+        "opentag",
+        "packagejson",
+        "txml"
+    ]
 }

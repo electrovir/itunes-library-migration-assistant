@@ -1,30 +1,25 @@
 import {readFileSync} from 'fs';
 import {testGroup} from 'test-vir';
-import {parseStringPromise} from 'xml2js';
+import {parse} from 'txml';
 import {getSampleFilePath} from '../file-paths';
 
 testGroup({
-    description: 'simple xml2js usage',
+    description: 'simple txml usage',
     tests: (runTest) => {
         runTest({
             description: 'parse a simple xml file into json',
-            test: async () => {
+            test: () => {
                 const simpleExampleFilePath = getSampleFilePath('simple-example.xml');
-                const simpleJson = await parseStringPromise(
-                    readFileSync(simpleExampleFilePath).toString(),
-                );
+                const simpleJson = parse(readFileSync(simpleExampleFilePath).toString());
                 // console.log(JSON.stringify(simpleJson, null, 4));
             },
         });
 
         runTest({
             description: 'parse a sample iTunes library xml file into json',
-            test: async () => {
+            test: () => {
                 const sampleLibraryFilePath = getSampleFilePath('library-example.xml');
-                const libraryJson = await parseStringPromise(
-                    readFileSync(sampleLibraryFilePath).toString(),
-                    {explicitChildren: true, preserveChildrenOrder: true},
-                );
+                const libraryJson = parse(readFileSync(sampleLibraryFilePath).toString());
                 // console.log(JSON.stringify(libraryJson, null, 4));
             },
         });
