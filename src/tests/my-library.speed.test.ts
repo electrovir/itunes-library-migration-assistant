@@ -1,10 +1,13 @@
-import {convertToJson, X2jOptions} from 'fast-xml-parser';
+import * as fastXmlParser from 'fast-xml-parser';
 import {createReadStream, existsSync, readFileSync} from 'fs';
+import * as libxmljs from 'libxmljs';
 import * as sax from 'sax';
 import {testGroup} from 'test-vir';
 import * as txml from 'txml';
-import {parseStringPromise} from 'xml2js';
+import * as xmlJs from 'xml-js';
+import * as xml2js from 'xml2js';
 import {getOutputFilePath} from '../file-paths';
+import {readLibrary} from '../library-reader';
 
 testGroup((runTest) => {
     const libraryPath = getOutputFilePath('library.xml');
@@ -75,13 +78,16 @@ testGroup((runTest) => {
     runTest({
         description: 'read the whole file into fast-xml-parser',
         /**
-         * This takes 100-200 milliseconds for my library but it doesn't preserve ordering of tags
-         * so its output is useless
+         * This takes ~2 seconds for my library but it doesn't preserve ordering of tags so its
+         * output is useless
          */
         test: () => {
             const startTime = Number(new Date());
-            const parserOptions: Partial<X2jOptions> = {};
-            const libraryJson = convertToJson(readFileSync(libraryPath).toString(), parserOptions);
+            const parserOptions: Partial<fastXmlParser.X2jOptions> = {};
+            const libraryJson = fastXmlParser.convertToJson(
+                fastXmlParser.getTraversalObj(readFileSync(libraryPath).toString(), parserOptions),
+                parserOptions,
+            );
             const endTime = Number(new Date());
 
             const diff = endTime - startTime;
@@ -96,10 +102,13 @@ testGroup((runTest) => {
          */
         test: async () => {
             const startTime = Number(new Date());
-            const libraryJson = await parseStringPromise(readFileSync(libraryPath).toString(), {
-                explicitChildren: true,
-                preserveChildrenOrder: true,
-            });
+            const libraryJson = await xml2js.parseStringPromise(
+                readFileSync(libraryPath).toString(),
+                {
+                    explicitChildren: true,
+                    preserveChildrenOrder: true,
+                },
+            );
             const endTime = Number(new Date());
 
             const diff = endTime - startTime;
@@ -109,8 +118,8 @@ testGroup((runTest) => {
     runTest({
         description: 'read the whole file into txml',
         /**
-         * Xml2js gives us a full json object that we can actually use (as it preserves order) but
-         * it is the slowest I've tried so far at 6-8 seconds for my library
+         * Txml gives us an object that we need and it is the fastest useful package so far at ~1
+         * second for parsing. That is still an order of magnitude slower than fast xml though.
          */
         test: () => {
             const startTime = Number(new Date());
@@ -119,6 +128,42 @@ testGroup((runTest) => {
 
             const diff = endTime - startTime;
             console.log('txml time milliseconds', diff);
+        },
+    });
+    runTest({
+        description: 'read the whole file into xml-js',
+        /** Xml-js provides useful data but it takes 6-7 seconds */
+        test: () => {
+            const startTime = Number(new Date());
+            const libraryJson = xmlJs.xml2js(readFileSync(libraryPath).toString());
+            const endTime = Number(new Date());
+
+            const diff = endTime - startTime;
+            console.log('xml-js time milliseconds', diff);
+        },
+    });
+    runTest({
+        description: 'read the whole file into libxmljs',
+        /** Libxmljs provides useful data but it takes ~5 seconds */
+        test: () => {
+            const startTime = Number(new Date());
+            const libraryJson = libxmljs.parseXml(readFileSync(libraryPath).toString());
+            const endTime = Number(new Date());
+
+            const diff = endTime - startTime;
+            console.log('libxmljs time milliseconds', diff);
+        },
+    });
+    runTest({
+        description: 'read the whole file into readLibrary',
+        /** This does not create js objects (yet) but takes ~900 milliseconds */
+        test: async () => {
+            const startTime = Number(new Date());
+            const lines = await readLibrary(libraryPath);
+            const endTime = Number(new Date());
+
+            const diff = endTime - startTime;
+            console.log('readLibrary time milliseconds', diff);
         },
     });
 });
