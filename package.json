@@ -22,7 +22,7 @@
         "prepublishOnly": "npm run test && npm run spellcheck",
         "test:full": "npm run test && npm run spellcheck && npm run format:check",
         "test": "rm -rf dist && tsc && test-vir \"./**/!(*.type|*.speed).test.js\"",
-        "test:speed": "rm -rf dist && tsc && test-vir \"./**/*.speed.test.js\"",
+        "test:speed": "rm -rf dist && tsc && test-vir \"./dist/**/*.speed.test.js\"",
         "spellcheck": "cspell --no-progress --unique \"./**/*\"",
         "format": "prettier --ignore-path .gitignore --write  \"./**/*.{ts,css,html,json}\"",
         "format:check": "prettier --ignore-path .gitignore --check  \"./**/*.{ts,css,html,json}\""
@@ -30,6 +30,7 @@
     "dependencies": {
         "byline": "^5.0.0",
         "fast-xml-parser": "^3.19.0",
+        "htmlparser2": "^6.0.1",
         "libxmljs": "^0.19.7",
         "sax": "^1.2.4",
         "txml": "^4.0.1",
@@ -42,14 +43,14 @@
         "@types/node": "^14.14.37",
         "@types/sax": "^1.2.1",
         "@types/xml2js": "^0.4.8",
-        "cspell": "^5.3.11",
+        "cspell": "^5.3.12",
         "prettier": "^2.2.1",
         "prettier-plugin-jsdoc": "^0.3.18",
         "prettier-plugin-organize-imports": "^1.1.1",
         "prettier-plugin-packagejson": "^2.2.10",
         "prettier-plugin-sort-json": "^0.0.2",
-        "test-vir": "^0.0.10",
+        "test-vir": "^0.0.11",
         "ts-node": "^9.1.1",
-        "typescript": "^4.2.3"
+        "typescript": "^4.2.4"
     }
 }

@@ -1,0 +1,9 @@
+message
+to
+Alice
+from
+Bob
+heading
+Hello
+body
+This is a demo!

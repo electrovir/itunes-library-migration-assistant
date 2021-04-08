@@ -4,7 +4,6 @@ import {testGroup} from 'test-vir';
 import {getSampleFilePath} from '../file-paths';
 
 testGroup({
-    forceOnly: true,
     description: 'simple fast xml usage',
     // fast-xml-parser doesn't preserve ordering of tags and has no events so it is utterly useless
     tests: (runTest) => {
@@ -25,8 +24,8 @@ testGroup({
             test: () => {
                 const sampleLibraryFilePath = getSampleFilePath('library-example.xml');
                 const libraryJson = parse(readFileSync(sampleLibraryFilePath).toString());
-                console.log('PARSE');
-                console.log(JSON.stringify(libraryJson, null, 4));
+                // console.log('PARSE');
+                // console.log(JSON.stringify(libraryJson, null, 4));
             },
         });
         runTest({
@@ -38,8 +37,8 @@ testGroup({
                     getTraversalObj(readFileSync(sampleLibraryFilePath).toString(), parserOptions),
                     parserOptions,
                 );
-                console.log('CONVERTTOJSON');
-                console.log(JSON.stringify(libraryJson, null, 4));
+                // console.log('CONVERTTOJSON');
+                // console.log(JSON.stringify(libraryJson, null, 4));
             },
         });
     },

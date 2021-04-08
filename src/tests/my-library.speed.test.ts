@@ -1,5 +1,6 @@
 import * as fastXmlParser from 'fast-xml-parser';
 import {createReadStream, existsSync, readFileSync} from 'fs';
+import * as htmlparser2 from 'htmlparser2';
 import * as libxmljs from 'libxmljs';
 import * as sax from 'sax';
 import {testGroup} from 'test-vir';
@@ -7,7 +8,7 @@ import * as txml from 'txml';
 import * as xmlJs from 'xml-js';
 import * as xml2js from 'xml2js';
 import {getOutputFilePath} from '../file-paths';
-import {readLibrary} from '../library-reader';
+import {readLibraryByLine} from './library-line-reader';
 
 testGroup((runTest) => {
     const libraryPath = getOutputFilePath('library.xml');
@@ -36,7 +37,7 @@ testGroup((runTest) => {
                 saxStream.on('end', () => {
                     const endTime = Number(new Date());
                     const diff = endTime - startTime;
-                    console.log('stream diff time milliseconds', diff);
+                    console.log('sax stream time milliseconds', diff);
                     resolve();
                 });
 
@@ -65,7 +66,7 @@ testGroup((runTest) => {
                 saxParser.onend = () => {
                     const endTime = Number(new Date());
                     const diff = endTime - startTime;
-                    console.log('parser diff time milliseconds', diff);
+                    console.log('sax parser time milliseconds', diff);
                     resolve();
                 };
 
@@ -117,17 +118,14 @@ testGroup((runTest) => {
     });
     runTest({
         description: 'read the whole file into txml',
-        /**
-         * Txml gives us an object that we need and it is the fastest useful package so far at ~1
-         * second for parsing. That is still an order of magnitude slower than fast xml though.
-         */
+        /** Txml gives us an object that we need and takes 1-2 seconds for parsing. */
         test: () => {
             const startTime = Number(new Date());
             const libraryJson = txml.parse(readFileSync(libraryPath).toString());
             const endTime = Number(new Date());
 
             const diff = endTime - startTime;
-            console.log('txml time milliseconds', diff);
+            console.log('txml time milliseconds >>', diff, '<< use this one');
         },
     });
     runTest({
@@ -155,15 +153,40 @@ testGroup((runTest) => {
         },
     });
     runTest({
-        description: 'read the whole file into readLibrary',
-        /** This does not create js objects (yet) but takes ~900 milliseconds */
+        description: 'read the whole file into readLibraryByLine',
+        /** This does not work and takes ~900 milliseconds */
         test: async () => {
             const startTime = Number(new Date());
-            const lines = await readLibrary(libraryPath);
+            const matches = await readLibraryByLine(libraryPath);
+            console.log({
+                openingTag: matches.openingTag.length,
+                closingTag: matches.closingTag.length,
+                selfClosing: matches.selfClosing.length,
+                all: matches.all.length,
+            });
             const endTime = Number(new Date());
 
             const diff = endTime - startTime;
             console.log('readLibrary time milliseconds', diff);
+        },
+    });
+    runTest({
+        description: 'read the whole file into htmlparser2',
+        /** This takes about as long as txml (1-2 seconds) but doesn't product as useful of a result */
+        test: async () => {
+            return new Promise<void>((resolve) => {
+                const startTime = Number(new Date());
+                const parser = new htmlparser2.Parser({
+                    onend() {
+                        const endTime = Number(new Date());
+                        const diff = endTime - startTime;
+                        console.log('htmlparser2 time milliseconds', diff);
+                        resolve();
+                    },
+                });
+                parser.write(readFileSync(libraryPath).toString());
+                parser.end();
+            });
         },
     });
 });
