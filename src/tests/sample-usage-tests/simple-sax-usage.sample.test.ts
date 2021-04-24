@@ -1,7 +1,7 @@
-import {createReadStream, createWriteStream, readFileSync, unlinkSync} from 'fs';
+import {createReadStream} from 'fs';
 import {createStream, QualifiedTag, Tag} from 'sax';
 import {testGroup} from 'test-vir';
-import {getOutputFilePath, getSampleFilePath} from '../file-paths';
+import {getSampleFilePath} from '../../file-paths';
 
 testGroup({
     description: 'simple sax usage',
@@ -210,47 +210,46 @@ testGroup({
                 });
             },
         });
-        runTest({
-            description: 'should be able to stream to a file',
-            expect: readFileSync(getSampleFilePath('test-stream-to-file.comparison.txt'))
-                .toString()
-                .trim(),
-            // occasionally this test fails. A rerun should fix it. The issue is the streaming,
-            // see comment below about it being not safe.
-            test: async () => {
-                /**
-                 * I'm pretty sure this is NOT SAFE to use for large files. It does not handle back
-                 * pressure or forward pressure. It is merely a simple example.
-                 */
-                return new Promise<string>((resolve, reject) => {
-                    const outputPath = getOutputFilePath('test-stream-to-file.txt');
-                    const outputStream = createWriteStream(outputPath, {flags: 'w'});
+        /** This test is flaky. The issue is the streaming, see comment below about it not being safe. */
+        // runTest({
+        //     description: 'should be able to stream to a file',
+        //     expect: readFileSync(getSampleFilePath('test-stream-to-file.comparison.txt'))
+        //         .toString()
+        //         .trim(),
+        //     test: async () => {
+        //         /**
+        //          * I'm pretty sure this is NOT SAFE to use for large files. It does not handle back
+        //          * pressure or forward pressure. It is merely a simple example.
+        //          */
+        //         return new Promise<string>((resolve, reject) => {
+        //             const outputPath = getOutputFilePath('test-stream-to-file.txt');
+        //             const outputStream = createWriteStream(outputPath, {flags: 'w'});
 
-                    const saxStream = createStream(true);
+        //             const saxStream = createStream(true);
 
-                    saxStream.on('opentag', (node) => {
-                        outputStream.write(node.name + '\n');
-                    });
+        //             saxStream.on('opentag', (node) => {
+        //                 outputStream.write(node.name + '\n');
+        //             });
 
-                    saxStream.on('end', () => {
-                        outputStream.close();
-                        const fileContents = readFileSync(outputPath).toString();
-                        unlinkSync(outputPath);
-                        resolve(fileContents.trim());
-                    });
+        //             saxStream.on('end', () => {
+        //                 outputStream.close();
+        //                 const fileContents = readFileSync(outputPath).toString();
+        //                 unlinkSync(outputPath);
+        //                 resolve(fileContents.trim());
+        //             });
 
-                    saxStream.on('error', (error) => {
-                        reject(error);
-                    });
-                    const stream = createReadStream(multiSimpleExampleFilePath);
-                    // catch file not found errors
-                    stream.on('error', (error) => {
-                        reject(error);
-                    });
+        //             saxStream.on('error', (error) => {
+        //                 reject(error);
+        //             });
+        //             const stream = createReadStream(multiSimpleExampleFilePath);
+        //             // catch file not found errors
+        //             stream.on('error', (error) => {
+        //                 reject(error);
+        //             });
 
-                    stream.pipe(saxStream);
-                });
-            },
-        });
+        //             stream.pipe(saxStream);
+        //         });
+        //     },
+        // });
     },
 });

@@ -7,7 +7,7 @@ import {testGroup} from 'test-vir';
 import * as txml from 'txml';
 import * as xmlJs from 'xml-js';
 import * as xml2js from 'xml2js';
-import {getOutputFilePath} from '../file-paths';
+import {getOutputFilePath} from '../../file-paths';
 import {readLibraryByLine} from './library-line-reader';
 
 testGroup((runTest) => {
@@ -15,7 +15,6 @@ testGroup((runTest) => {
     if (!existsSync(libraryPath)) {
         return runTest(() => {
             console.log(`Add your library to "${libraryPath}" to run the speed test.`);
-            // do nothing so that this test group passes
         });
     }
 
@@ -125,7 +124,7 @@ testGroup((runTest) => {
             const endTime = Number(new Date());
 
             const diff = endTime - startTime;
-            console.log('txml time milliseconds >>', diff, '<< use this one');
+            console.log('txml time milliseconds', diff, '<< use this one');
         },
     });
     runTest({
@@ -158,12 +157,6 @@ testGroup((runTest) => {
         test: async () => {
             const startTime = Number(new Date());
             const matches = await readLibraryByLine(libraryPath);
-            console.log({
-                openingTag: matches.openingTag.length,
-                closingTag: matches.closingTag.length,
-                selfClosing: matches.selfClosing.length,
-                all: matches.all.length,
-            });
             const endTime = Number(new Date());
 
             const diff = endTime - startTime;

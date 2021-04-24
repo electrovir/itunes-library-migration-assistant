@@ -1,7 +1,7 @@
 import {readFileSync} from 'fs';
 import {testGroup} from 'test-vir';
 import {xml2js} from 'xml-js';
-import {getSampleFilePath} from '../file-paths';
+import {getSampleFilePath} from '../../file-paths';
 
 testGroup({
     description: 'simple xml-js usage',
@@ -11,7 +11,6 @@ testGroup({
             test: () => {
                 const simpleExampleFilePath = getSampleFilePath('simple-example.xml');
                 const simpleJson = xml2js(readFileSync(simpleExampleFilePath).toString());
-                // console.log(JSON.stringify(simpleJson, null, 4));
             },
         });
 
@@ -20,7 +19,6 @@ testGroup({
             test: () => {
                 const sampleLibraryFilePath = getSampleFilePath('library-example.xml');
                 const libraryJson = xml2js(readFileSync(sampleLibraryFilePath).toString());
-                // console.log(JSON.stringify(libraryJson, null, 4));
             },
         });
     },

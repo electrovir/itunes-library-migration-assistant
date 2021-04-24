@@ -1,7 +1,7 @@
 import {convertToJson, getTraversalObj, parse, X2jOptions} from 'fast-xml-parser';
 import {readFileSync} from 'fs';
 import {testGroup} from 'test-vir';
-import {getSampleFilePath} from '../file-paths';
+import {getSampleFilePath} from '../../file-paths';
 
 testGroup({
     description: 'simple fast xml usage',
@@ -24,8 +24,6 @@ testGroup({
             test: () => {
                 const sampleLibraryFilePath = getSampleFilePath('library-example.xml');
                 const libraryJson = parse(readFileSync(sampleLibraryFilePath).toString());
-                // console.log('PARSE');
-                // console.log(JSON.stringify(libraryJson, null, 4));
             },
         });
         runTest({
@@ -37,8 +35,6 @@ testGroup({
                     getTraversalObj(readFileSync(sampleLibraryFilePath).toString(), parserOptions),
                     parserOptions,
                 );
-                // console.log('CONVERTTOJSON');
-                // console.log(JSON.stringify(libraryJson, null, 4));
             },
         });
     },

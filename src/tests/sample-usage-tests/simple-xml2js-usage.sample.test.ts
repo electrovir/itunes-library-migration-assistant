@@ -1,7 +1,7 @@
 import {readFileSync} from 'fs';
 import {testGroup} from 'test-vir';
 import {parseStringPromise} from 'xml2js';
-import {getSampleFilePath} from '../file-paths';
+import {getSampleFilePath} from '../../file-paths';
 
 testGroup({
     description: 'simple xml2js usage',
@@ -13,7 +13,6 @@ testGroup({
                 const simpleJson = await parseStringPromise(
                     readFileSync(simpleExampleFilePath).toString(),
                 );
-                // console.log(JSON.stringify(simpleJson, null, 4));
             },
         });
 
@@ -25,7 +24,6 @@ testGroup({
                     readFileSync(sampleLibraryFilePath).toString(),
                     {explicitChildren: true, preserveChildrenOrder: true},
                 );
-                // console.log(JSON.stringify(libraryJson, null, 4));
             },
         });
     },
