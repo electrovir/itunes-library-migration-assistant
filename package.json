@@ -20,7 +20,7 @@
     "scripts": {
         "prepublishOnly": "rm -rf dist && npm run test && npm run spellcheck",
         "test:full": "npm run test && npm run spellcheck && npm run format:check",
-        "test": "rm -rf dist && tsc && test-vir \"./dist/**/!(*.type|*.speed|*.sample).test.js\"",
+        "test": "tsc && test-vir \"./dist/**/!(*.type|*.speed|*.sample).test.js\"",
         "test:speed": "rm -rf dist && tsc && test-vir \"./dist/**/*.speed.test.js\"",
         "test:samples": "rm -rf dist && tsc && test-vir \"./dist/**/*.sample.test.js\"",
         "spellcheck": "cspell --no-progress --unique \"./**/*\"",
@@ -29,7 +29,7 @@
     },
     "dependencies": {
         "byline": "^5.0.0",
-        "fsm-vir": "^0.0.1",
+        "fsm-vir": "^0.0.4",
         "libxmljs": "^0.19.7",
         "txml": "^4.0.1",
         "xml2js": "^0.4.23"
