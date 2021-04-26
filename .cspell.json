@@ -1,10 +1,6 @@
 {
+    "ignorePaths": ["node_modules/**", "package-lock.json", "dist/**", "**/*.xml"],
     "version": "0.1",
-    "ignorePaths": [
-        "node_modules/**",
-        "package-lock.json",
-        "dist/**"
-    ],
     "words": [
         "accum",
         "closetag",
@@ -14,6 +10,7 @@
         "ontext",
         "opentag",
         "packagejson",
-        "txml"
+        "txml",
+        "itunes"
     ]
 }

@@ -29,7 +29,7 @@
     },
     "dependencies": {
         "byline": "^5.0.0",
-        "fsm-vir": "^0.0.4",
+        "fsm-vir": "^0.0.5",
         "libxmljs": "^0.19.7",
         "txml": "^4.0.1",
         "xml2js": "^0.4.23"
