@@ -13,7 +13,7 @@ export function readLibrary(
     libraryFilePath: string,
     omitIteratedWhiteSpace = false,
 ): Readonly<{xml: LibraryNode[]}> & Iterable<LibraryNodeIteratorValue> {
-    const fileContents = readFileSync(libraryFilePath).toString().replace(/\r/g, '');
+    const fileContents = readFileSync(libraryFilePath).toString();
     const txmlOutput: LibraryNode[] = parse(fileContents, readLibraryTxmlOptions);
 
     return {
