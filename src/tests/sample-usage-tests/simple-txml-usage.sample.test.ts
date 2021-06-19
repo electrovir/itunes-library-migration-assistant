@@ -1,7 +1,7 @@
 import {readFileSync} from 'fs';
 import {testGroup} from 'test-vir';
 import {parse, TParseOptions} from 'txml';
-import {getSampleFilePath} from '../../file-paths';
+import {getSampleFilePath} from '../file-paths';
 
 testGroup({
     description: 'simple txml usage',

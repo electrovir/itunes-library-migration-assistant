@@ -2,7 +2,7 @@ import * as byline from 'byline';
 import {createReadStream} from 'fs';
 import * as sax from 'sax';
 import {testGroup} from 'test-vir';
-import {getSampleFilePath} from '../../file-paths';
+import {getSampleFilePath} from '../file-paths';
 
 testGroup({
     description: 'simple byline streaming usage',

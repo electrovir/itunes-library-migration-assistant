@@ -1,7 +1,7 @@
 import {createReadStream} from 'fs';
 import {createStream, QualifiedTag, Tag} from 'sax';
 import {testGroup} from 'test-vir';
-import {getSampleFilePath} from '../../file-paths';
+import {getSampleFilePath} from '../file-paths';
 
 testGroup({
     description: 'simple sax usage',

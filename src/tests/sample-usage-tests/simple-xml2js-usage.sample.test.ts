@@ -1,7 +1,7 @@
 import {readFileSync} from 'fs';
 import {testGroup} from 'test-vir';
 import {parseStringPromise} from 'xml2js';
-import {getSampleFilePath} from '../../file-paths';
+import {getSampleFilePath} from '../file-paths';
 
 testGroup({
     description: 'simple xml2js usage',

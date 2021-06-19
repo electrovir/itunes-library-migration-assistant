@@ -28,12 +28,7 @@
         "format:check": "prettier --ignore-path .gitignore --check  \"./**/*.{ts,css,html,json}\""
     },
     "dependencies": {
-        "byline": "^5.0.0",
-        "fsm-vir": "^0.0.5",
-        "libxmljs": "^0.19.7",
-        "plist": "^3.0.2",
-        "txml": "^4.0.1",
-        "xml2js": "^0.4.23"
+        "plist": "^3.0.2"
     },
     "devDependencies": {
         "@types/byline": "^4.2.32",
@@ -42,9 +37,12 @@
         "@types/plist": "^3.0.2",
         "@types/sax": "^1.2.1",
         "@types/xml2js": "^0.4.8",
+        "byline": "^5.0.0",
         "cspell": "^5.3.12",
         "fast-xml-parser": "^3.19.0",
+        "fsm-vir": "^0.0.5",
         "htmlparser2": "^6.1.0",
+        "libxmljs": "^0.19.7",
         "prettier": "^2.2.1",
         "prettier-plugin-jsdoc": "^0.3.20",
         "prettier-plugin-organize-imports": "^1.1.1",
@@ -53,7 +51,9 @@
         "sax": "^1.2.4",
         "test-vir": "^0.0.12",
         "ts-node": "^9.1.1",
+        "txml": "^4.0.1",
         "typescript": "^4.2.4",
-        "xml-js": "^1.6.11"
+        "xml-js": "^1.6.11",
+        "xml2js": "^0.4.23"
     }
 }

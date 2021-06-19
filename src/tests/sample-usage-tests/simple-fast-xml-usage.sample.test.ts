@@ -1,7 +1,7 @@
 import {convertToJson, getTraversalObj, parse, X2jOptions} from 'fast-xml-parser';
 import {readFileSync} from 'fs';
 import {testGroup} from 'test-vir';
-import {getSampleFilePath} from '../../file-paths';
+import {getSampleFilePath} from '../file-paths';
 
 testGroup({
     description: 'simple fast xml usage',

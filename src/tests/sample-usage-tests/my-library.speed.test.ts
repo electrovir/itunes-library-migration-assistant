@@ -8,7 +8,7 @@ import {testGroup} from 'test-vir';
 import * as txml from 'txml';
 import * as xmlJs from 'xml-js';
 import * as xml2js from 'xml2js';
-import {getOutputFilePath} from '../../file-paths';
+import {getOutputFilePath} from '../file-paths';
 import {readLibraryByLine} from './library-line-reader';
 
 testGroup((runTest) => {

@@ -1,7 +1,7 @@
 import {readFileSync} from 'fs';
 import {parseXml} from 'libxmljs';
 import {testGroup} from 'test-vir';
-import {getSampleFilePath} from '../../file-paths';
+import {getSampleFilePath} from '../file-paths';
 
 testGroup({
     description: 'simple xml-js usage',
