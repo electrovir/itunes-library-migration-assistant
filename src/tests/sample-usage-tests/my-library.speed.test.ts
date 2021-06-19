@@ -2,6 +2,7 @@ import * as fastXmlParser from 'fast-xml-parser';
 import {createReadStream, existsSync, readFileSync} from 'fs';
 import * as htmlparser2 from 'htmlparser2';
 import * as libxmljs from 'libxmljs';
+import * as plist from 'plist';
 import * as sax from 'sax';
 import {testGroup} from 'test-vir';
 import * as txml from 'txml';
@@ -14,7 +15,7 @@ testGroup((runTest) => {
     const libraryPath = getOutputFilePath('library.xml');
     if (!existsSync(libraryPath)) {
         return runTest(() => {
-            console.log(`Add your library to "${libraryPath}" to run the speed test.`);
+            throw new Error(`Add your library to "${libraryPath}" to run the speed test.`);
         });
     }
 
@@ -124,7 +125,7 @@ testGroup((runTest) => {
             const endTime = Number(new Date());
 
             const diff = endTime - startTime;
-            console.log('txml time milliseconds', diff, '<< use this one');
+            console.log('txml time milliseconds', diff);
         },
     });
     runTest({
@@ -165,7 +166,7 @@ testGroup((runTest) => {
     });
     runTest({
         description: 'read the whole file into htmlparser2',
-        /** This takes about as long as txml (1-2 seconds) but doesn't product as useful of a result */
+        /** This takes about as long as txml (1-2 seconds) but doesn't produce as useful of a result */
         test: async () => {
             return new Promise<void>((resolve) => {
                 const startTime = Number(new Date());
@@ -180,6 +181,18 @@ testGroup((runTest) => {
                 parser.write(readFileSync(libraryPath).toString());
                 parser.end();
             });
+        },
+    });
+    runTest({
+        description: 'read the whole file into plist',
+        // the plist package is one of the slowest but it produces all the output we need.
+        test: () => {
+            const startTime = Number(new Date());
+            const result = plist.parse(readFileSync(libraryPath).toString());
+            const endTime = Number(new Date());
+
+            const diff = endTime - startTime;
+            console.log('plist time milliseconds', diff);
         },
     });
 });
