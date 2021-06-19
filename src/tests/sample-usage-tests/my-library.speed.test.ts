@@ -1,7 +1,7 @@
 import * as fastXmlParser from 'fast-xml-parser';
 import {createReadStream, existsSync, readFileSync} from 'fs';
 import * as htmlparser2 from 'htmlparser2';
-import * as libxmljs from 'libxmljs';
+// import * as libxmljs from 'libxmljs';
 import * as plist from 'plist';
 import * as sax from 'sax';
 import {testGroup} from 'test-vir';
@@ -140,18 +140,22 @@ testGroup((runTest) => {
             console.log('xml-js time milliseconds', diff);
         },
     });
-    runTest({
-        description: 'read the whole file into libxmljs',
-        /** Libxmljs provides useful data but it takes ~5 seconds */
-        test: () => {
-            const startTime = Number(new Date());
-            const libraryJson = libxmljs.parseXml(readFileSync(libraryPath).toString());
-            const endTime = Number(new Date());
+    /**
+     * Libxmljs is no longer installed as part of this package because the installation process
+     * takes an entire minute!
+     */
+    // runTest({
+    //     description: 'read the whole file into libxmljs',
+    //     /** Libxmljs provides useful data but it takes ~5 seconds */
+    //     test: () => {
+    //         const startTime = Number(new Date());
+    //         const libraryJson = libxmljs.parseXml(readFileSync(libraryPath).toString());
+    //         const endTime = Number(new Date());
 
-            const diff = endTime - startTime;
-            console.log('libxmljs time milliseconds', diff);
-        },
-    });
+    //         const diff = endTime - startTime;
+    //         console.log('libxmljs time milliseconds', diff);
+    //     },
+    // });
     runTest({
         description: 'read the whole file into readLibraryByLine',
         /** This does not work and takes ~900 milliseconds */

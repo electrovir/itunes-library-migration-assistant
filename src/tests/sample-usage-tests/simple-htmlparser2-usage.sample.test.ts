@@ -2,7 +2,7 @@ import {readFileSync} from 'fs';
 import {Parser} from 'htmlparser2';
 import {testGroup} from 'test-vir';
 import {getSampleFilePath} from '../file-paths';
-import {syncWait} from '../wait';
+import {syncWait} from './wait';
 
 testGroup({
     description: 'simple htmlparser2 usage',
