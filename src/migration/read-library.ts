@@ -1,16 +1,19 @@
 import {existsSync, readFileSync} from 'fs';
-import {parse} from 'plist';
+import {basename} from 'path';
+import {parse, PlistValue} from 'plist';
 import {LibraryParseError} from '../errors/library-parse-error';
-import {assertsValidLibrary, ParsedLibrary} from './parsed-types';
+import {assertValidLibrary, ParsedLibrary} from './parsed-types';
 
-export function readLibrary(path: string): ParsedLibrary {
+export function readLibrary(path: string, loggingEnabled = true): ParsedLibrary {
     if (!existsSync(path)) {
         throw new LibraryParseError(`Library file does not exist: ${path}`);
     }
+
+    let parsedLibrary: Readonly<PlistValue>;
+
     try {
-        const parsedLibrary = parse(readFileSync(path).toString());
-        assertsValidLibrary(parsedLibrary);
-        return parsedLibrary as any;
+        loggingEnabled && console.info('Parsing started...');
+        parsedLibrary = parse(readFileSync(path).toString());
     } catch (error) {
         if (error instanceof LibraryParseError) {
             throw error;
@@ -18,4 +21,10 @@ export function readLibrary(path: string): ParsedLibrary {
             throw new LibraryParseError(`failed to parse library: ${String(error)}`);
         }
     }
+
+    loggingEnabled && console.info('Parsing finished.');
+    loggingEnabled && console.info('Validation started...');
+    assertValidLibrary(parsedLibrary, basename(path));
+    loggingEnabled && console.info('Validation finished.');
+    return parsedLibrary as any;
 }

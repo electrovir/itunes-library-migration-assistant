@@ -1,6 +1,6 @@
 import {testGroup} from 'test-vir';
 import {readLibrary} from '../migration/read-library';
-import {getSampleFilePath} from './file-paths';
+import {getOutputFilePath, getSampleFilePath} from './file-paths';
 
 testGroup({
     tests: (runTest) => {
@@ -8,6 +8,12 @@ testGroup({
             description: 'can read small sample library',
             test: () => {
                 readLibrary(getSampleFilePath('library-example.xml'));
+            },
+        });
+        runTest({
+            description: 'can read full library',
+            test: () => {
+                readLibrary(getOutputFilePath('library.xml'));
             },
         });
     },

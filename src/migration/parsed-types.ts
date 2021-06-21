@@ -1,4 +1,4 @@
-import {LibraryParseError} from '../errors/library-parse-error';
+import {LibraryValidationError} from '../errors/library-validation-error';
 
 export type ParsedPlaylistItem = {
     'Track ID': number;
@@ -24,36 +24,48 @@ export type ParsedPlaylist = {
 };
 
 export type ParsedTrack = {
-    'Track ID': number;
-    Size: number;
-    'Total Time': number;
-    Year: number;
-    BPM: number;
-    'Date Modified': string;
-    'Date Added': string;
+    'Album Artist': string;
+    'Album Rating Computed': boolean;
+    'Album Rating': number;
     'Bit Rate': number;
-    'Sample Rate': number;
+    'Date Added': string;
+    'Date Modified': string;
+
+    'Disc Number'?: number;
+    'Disc Count'?: number;
+    'Track Number'?: number;
+    'Track Count'?: number;
+    'Release Date'?: Date;
+    'Artwork Count'?: number;
+    Protected?: boolean;
+    Purchased?: boolean;
+    Comments?: string;
+
+    'File Folder Count': number;
+    'File Type': number;
+    'Library Folder Count': number;
+    'Persistent ID': string;
     'Play Count': number;
-    'Play Date': number;
     'Play Date UTC': string;
+    'Play Date': number;
+    'Rating Computed'?: boolean;
+    'Sample Rate': number;
     'Skip Count': number;
     'Skip Date': string;
-    Rating: number;
-    'Album Rating': number;
-    'Album Rating Computed': boolean;
-    'Persistent ID': string;
+    'Total Time': number;
+    'Track ID': number;
     'Track Type': string;
-    'File Type': number;
-    'File Folder Count': number;
-    'Library Folder Count': number;
-    Name: string;
-    Artist: string;
-    'Album Artist': string;
-    Composer: string;
     Album: string;
+    Artist: string;
+    BPM: number;
+    Composer: string;
     Genre: string;
     Kind: string;
     Location: string;
+    Name: string;
+    Rating: number;
+    Size: number;
+    Year: number;
 };
 
 export type ParsedLibrary = {
@@ -89,6 +101,17 @@ const parsedTrackTypes: Readonly<Record<keyof ParsedTrack, string>> = {
     BPM: 'number',
     'Date Modified': 'Date',
     'Date Added': 'Date',
+
+    'Disc Number': 'number',
+    'Disc Count': 'number',
+    'Track Number': 'number',
+    'Track Count': 'number',
+    'Release Date': 'Date',
+    'Artwork Count': 'number',
+    Protected: 'boolean',
+    Purchased: 'boolean',
+    Comments: 'string',
+
     'Bit Rate': 'number',
     'Sample Rate': 'number',
     'Play Count': 'number',
@@ -97,6 +120,7 @@ const parsedTrackTypes: Readonly<Record<keyof ParsedTrack, string>> = {
     'Skip Count': 'number',
     'Skip Date': 'Date',
     Rating: 'number',
+    'Rating Computed': 'boolean',
     'Album Rating': 'number',
     'Album Rating Computed': 'boolean',
     'Persistent ID': 'string',
@@ -124,31 +148,33 @@ export const parsedPlaylistTypes: Readonly<Record<keyof ParsedPlaylist, string>>
     'Playlist ID': 'number',
     'Playlist Items': 'object',
     'Playlist Persistent ID': 'string',
-    'Smart Criteria': 'object',
-    'Smart Info': 'object',
+    'Smart Criteria': 'Buffer',
+    'Smart Info': 'Buffer',
     Master: 'boolean',
     Name: 'string',
     Visible: 'boolean',
 };
 
-export function assertsValidPlaylist(
-    parsedPlaylist: any,
-): asserts parsedPlaylist is ParsedPlaylist {}
-
-export function assertsValidTrack(parsedTrack: any): asserts parsedTrack is ParsedTrack {}
-
 type ValidationBasis = {
     types: Record<string, string>;
-    objectCheckers: Record<string, (input: any) => void>;
+    subTypes?: Record<string, ValidationBasis>;
 };
 
-function assertsObjectFromTypes<T extends object>(
+function assertObjectFromTypes<T extends object>(
     name: string,
     input: unknown,
     validationBasis: ValidationBasis,
+    nameTree: string[],
 ): asserts input is T {
+    if (input === undefined) {
+        throw new LibraryValidationError(`${name} does not exist.`, nameTree.concat(name));
+    }
+
     if (typeof input !== 'object' || !input) {
-        throw new LibraryParseError(`${name} is not an object.`);
+        throw new LibraryValidationError(
+            `${name} is not an object: ${input}`,
+            nameTree.concat(name),
+        );
     }
 
     const invalidKeys = Object.keys(input).filter((libraryKey) => {
@@ -157,14 +183,26 @@ function assertsObjectFromTypes<T extends object>(
             if (!(value instanceof Date)) {
                 return true;
             }
+        } else if (validationBasis.types[libraryKey] === 'Buffer') {
+            if (!(value instanceof Buffer)) {
+                return true;
+            }
         } else if (typeof value !== validationBasis.types[libraryKey]) {
             return true;
         }
 
         if (validationBasis.types[libraryKey] === 'object') {
-            const propertyChecker = validationBasis.objectCheckers[libraryKey];
-            if (propertyChecker) {
-                propertyChecker(value);
+            const subValidation = validationBasis.subTypes?.[libraryKey];
+            if (subValidation) {
+                Object.keys(value).forEach((subKey) => {
+                    const subValue = value[subKey];
+                    assertObjectFromTypes(
+                        libraryKey,
+                        subValue,
+                        subValidation,
+                        nameTree.concat(name),
+                    );
+                });
             } else {
                 throw new Error(`Missing validation basis for ${libraryKey} key in ${name}`);
             }
@@ -173,54 +211,53 @@ function assertsObjectFromTypes<T extends object>(
         return false;
     });
 
-    if (invalidKeys.length) {
-        const invalidValues = invalidKeys.reduce(
-            (accum: Record<string, {expected: string | undefined; got: unknown}>, key) => {
-                accum[key] = {
-                    expected: validationBasis.types[key] || 'undefined',
-                    got: typeof (input as any)[key],
-                };
-                return accum;
-            },
-            {},
-        );
-        throw new LibraryParseError(
-            `Invalid ${name} keys:\n${JSON.stringify(invalidValues, null, 4)}`,
+    const missingKeys = Object.keys(validationBasis.types).filter((validationKey) => {
+        return !(validationKey in input);
+    });
+
+    const invalidValues = invalidKeys.reduce(
+        (accum: Record<string, {expected: string | undefined; got: unknown}>, key) => {
+            accum[key] = {
+                expected: validationBasis.types[key] || 'undefined',
+                got: typeof (input as any)[key],
+            };
+            return accum;
+        },
+        {},
+    );
+    const invalidKeysMessage = invalidKeys.length
+        ? `Invalid ${name} keys:\n${JSON.stringify(invalidValues, null, 4)}`
+        : '';
+    const missingKeysMessage = missingKeys.length ? `Missing keys:${missingKeys.join(', ')}` : '';
+
+    if (invalidKeys.length || missingKeys.length) {
+        const separator = invalidKeys.length && missingKeys.length ? '\n' : '';
+        throw new LibraryValidationError(
+            `${invalidKeysMessage}${separator}${missingKeysMessage}`,
+            nameTree.concat(name),
         );
     }
 }
 
-export function assertsValidLibrary(parsedLibrary: any): asserts parsedLibrary is ParsedLibrary {
-    assertsObjectFromTypes<ParsedLibrary>('parsed library', parsedLibrary, {
-        types: parsedLibraryTypes,
-        objectCheckers: {
-            Tracks: (tracksRecord: Record<string, ParsedTrack>) => {
-                Object.values(tracksRecord).forEach((track) => {
-                    assertsObjectFromTypes('Parsed track', track, {
-                        types: parsedTrackTypes,
-                        objectCheckers: {},
-                    });
-                });
-            },
-            Playlists: (playlists: ParsedPlaylist[]) => {
-                playlists.forEach((playlist) => {
-                    assertsObjectFromTypes('Parsed playlist', playlist, {
-                        types: parsedPlaylistTypes,
-                        objectCheckers: {
-                            'Smart Info': () => {throw new Error('not implemented yet')},
-                            'Smart Criteria': () => {throw new Error('not implemented yet'},
-                            'Playlist Items': (playlistItems: ParsedPlaylistItem[]) => {
-                                playlistItems.forEach((playlistItem) => {
-                                    assertsObjectFromTypes('Parsed playlist item', playlistItem, {
-                                        types: parsedPlaylistItemTypes,
-                                        objectCheckers: {},
-                                    });
-                                });
-                            },
-                        },
-                    });
-                });
+export function assertValidLibrary(
+    parsedLibrary: any,
+    fileName: string,
+): asserts parsedLibrary is ParsedLibrary {
+    assertObjectFromTypes<ParsedLibrary>(
+        fileName,
+        parsedLibrary,
+        {
+            types: parsedLibraryTypes,
+            subTypes: {
+                Tracks: {types: parsedTrackTypes},
+                Playlists: {
+                    types: parsedPlaylistTypes,
+                    subTypes: {
+                        'Playlist Items': {types: parsedPlaylistItemTypes},
+                    },
+                },
             },
         },
-    });
+        [],
+    );
 }
