@@ -1,5 +1,6 @@
+import {existsSync} from 'fs';
 import {testGroup} from 'test-vir';
-import {readLibrary} from '../migration/read-library';
+import {readLibrary} from '../migration/reading/read-library';
 import {getOutputFilePath, getSampleFilePath} from './file-paths';
 
 testGroup({
@@ -10,11 +11,20 @@ testGroup({
                 readLibrary(getSampleFilePath('library-example.xml'));
             },
         });
-        runTest({
-            description: 'can read full library',
-            test: () => {
-                readLibrary(getOutputFilePath('library.xml'));
-            },
-        });
+
+        const testFullLibraryPath = getOutputFilePath('library.xml');
+
+        if (existsSync(testFullLibraryPath)) {
+            runTest({
+                description: 'can read full library',
+                test: () => {
+                    readLibrary(getOutputFilePath('library.xml'));
+                },
+            });
+        } else {
+            console.info(
+                `Put your library into ${testFullLibraryPath} to test the parser against it`,
+            );
+        }
     },
 });

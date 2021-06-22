@@ -1,8 +1,9 @@
 import {existsSync, readFileSync} from 'fs';
 import {basename} from 'path';
 import {parse, PlistValue} from 'plist';
-import {LibraryParseError} from '../errors/library-parse-error';
-import {assertValidLibrary, ParsedLibrary} from './parsed-types';
+import {LibraryParseError} from '../../errors/library-parse-error';
+import {ParsedLibrary} from './parsed-types';
+import {assertValidLibrary} from './validation';
 
 export function readLibrary(path: string, loggingEnabled = true): ParsedLibrary {
     if (!existsSync(path)) {
