@@ -205,5 +205,7 @@
                 </array>
             </dict>
         </array>
+        <key>Music Folder</key>
+        <string>file:///some-folder/</string>
     </dict>
 </plist>

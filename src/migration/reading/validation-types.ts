@@ -35,6 +35,10 @@ export const parsedLibraryTypes: ValidationTypes<ParsedLibrary> = {
         type: 'number',
         required: true,
     },
+    'Music Folder': {
+        type: 'string',
+        required: true,
+    },
     'Show Content Ratings': {
         type: 'boolean',
         required: true,
@@ -106,6 +110,10 @@ export const parsedTrackTypes: ValidationTypes<ParsedTrack> = {
         type: 'number',
         required: false,
     },
+    'Part Of Gapless Album': {
+        type: 'boolean',
+        required: false,
+    },
     'Persistent ID': {
         type: 'string',
         required: true,
@@ -140,6 +148,18 @@ export const parsedTrackTypes: ValidationTypes<ParsedTrack> = {
     },
     'Skip Date': {
         type: 'Date',
+        required: false,
+    },
+    'Sort Album': {
+        type: 'string',
+        required: false,
+    },
+    'Sort Artist': {
+        type: 'string',
+        required: false,
+    },
+    'Sort Name': {
+        type: 'string',
         required: false,
     },
     'Total Time': {
@@ -236,6 +256,10 @@ export const parsedPlaylistTypes: ValidationTypes<ParsedPlaylist> = {
         type: 'number',
         required: false,
     },
+    'Parent Persistent ID': {
+        type: 'string',
+        required: false,
+    },
     'Playlist ID': {
         type: 'number',
         required: true,
@@ -247,6 +271,10 @@ export const parsedPlaylistTypes: ValidationTypes<ParsedPlaylist> = {
     'Playlist Persistent ID': {
         type: 'string',
         required: true,
+    },
+    'Purchased Music': {
+        type: 'boolean',
+        required: false,
     },
     'Smart Criteria': {
         type: 'Buffer',

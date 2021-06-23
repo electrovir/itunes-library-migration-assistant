@@ -32,26 +32,26 @@ function validateObject(
         );
     } else {
         const invalidKeys = Object.keys(input).filter((libraryKey) => {
-            const validationValue = validationBasis.types[libraryKey];
-            if (!validationValue) {
-                // if the key is missing and required, it will be caught later
+            const validationComparison = validationBasis.types[libraryKey];
+            if (!validationComparison) {
+                // if we don't have the key in validation checks, that will be caught later
                 return false;
             }
 
             const value: any = (input as any)[libraryKey];
-            if (validationValue.type === 'Date') {
+            if (validationComparison.type === 'Date') {
                 if (!(value instanceof Date)) {
                     return true;
                 }
-            } else if (validationValue.type === 'Buffer') {
+            } else if (validationComparison.type === 'Buffer') {
                 if (!(value instanceof Buffer)) {
                     return true;
                 }
-            } else if (typeof value !== validationValue.type) {
+            } else if (typeof value !== validationComparison.type) {
                 return true;
             }
 
-            if (validationValue.type === 'object') {
+            if (validationComparison.type === 'object') {
                 const subValidation = validationBasis.subTypes?.[libraryKey];
                 if (subValidation) {
                     Object.keys(value).forEach((subKey) => {
@@ -78,6 +78,10 @@ function validateObject(
             return false;
         });
 
+        const missingValidationKeys = Object.keys(input).filter((libraryKey) => {
+            return !(libraryKey in validationBasis.types);
+        });
+
         const missingKeys = Object.keys(validationBasis.types).filter((validationKey) => {
             return !(validationKey in input) && validationBasis.types[validationKey]!.required;
         });
@@ -98,12 +102,20 @@ function validateObject(
         const missingKeysMessage = missingKeys.length
             ? `Missing keys: ${missingKeys.join(', ')}`
             : '';
+        const missingValidationKeysMessage = missingValidationKeys.length
+            ? `Missing validation for keys:\n${missingValidationKeys.join(', ')}`
+            : '';
 
         if (invalidKeys.length || missingKeys.length) {
-            const separator = invalidKeys.length && missingKeys.length ? '\n' : '';
             errors.push(
                 new LibraryValidationError(
-                    `${invalidKeysMessage}${separator}${missingKeysMessage}`,
+                    `${(input as {Name?: string}).Name} errors:\n${[
+                        invalidKeysMessage,
+                        missingKeysMessage,
+                        missingValidationKeysMessage,
+                    ]
+                        .filter((message) => !!message)
+                        .join('\n')}`,
                     nameTree.concat(name),
                 ),
             );
