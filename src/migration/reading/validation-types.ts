@@ -76,7 +76,7 @@ export const parsedTrackTypes: ValidationTypes<ParsedTrack> = {
     },
     'Bit Rate': {
         type: 'number',
-        required: true,
+        required: false,
     },
     'Date Added': {
         type: 'Date',
@@ -84,7 +84,7 @@ export const parsedTrackTypes: ValidationTypes<ParsedTrack> = {
     },
     'Date Modified': {
         type: 'Date',
-        required: true,
+        required: false,
     },
     'Disc Count': {
         type: 'number',
@@ -96,7 +96,7 @@ export const parsedTrackTypes: ValidationTypes<ParsedTrack> = {
     },
     'File Folder Count': {
         type: 'number',
-        required: true,
+        required: false,
     },
     'File Type': {
         type: 'number',
@@ -104,7 +104,7 @@ export const parsedTrackTypes: ValidationTypes<ParsedTrack> = {
     },
     'Library Folder Count': {
         type: 'number',
-        required: true,
+        required: false,
     },
     'Persistent ID': {
         type: 'string',
@@ -144,7 +144,7 @@ export const parsedTrackTypes: ValidationTypes<ParsedTrack> = {
     },
     'Total Time': {
         type: 'number',
-        required: true,
+        required: false,
     },
     'Track Count': {
         type: 'number',
@@ -188,11 +188,11 @@ export const parsedTrackTypes: ValidationTypes<ParsedTrack> = {
     },
     Kind: {
         type: 'string',
-        required: true,
+        required: false,
     },
     Location: {
         type: 'string',
-        required: true,
+        required: false,
     },
     Name: {
         type: 'string',
@@ -212,7 +212,7 @@ export const parsedTrackTypes: ValidationTypes<ParsedTrack> = {
     },
     Size: {
         type: 'number',
-        required: true,
+        required: false,
     },
     Year: {
         type: 'number',
@@ -234,7 +234,7 @@ export const parsedPlaylistTypes: ValidationTypes<ParsedPlaylist> = {
     },
     'Distinguished Kind': {
         type: 'number',
-        required: true,
+        required: false,
     },
     'Playlist ID': {
         type: 'number',
@@ -242,7 +242,7 @@ export const parsedPlaylistTypes: ValidationTypes<ParsedPlaylist> = {
     },
     'Playlist Items': {
         type: 'object',
-        required: true,
+        required: false,
     },
     'Playlist Persistent ID': {
         type: 'string',
@@ -250,15 +250,15 @@ export const parsedPlaylistTypes: ValidationTypes<ParsedPlaylist> = {
     },
     'Smart Criteria': {
         type: 'Buffer',
-        required: true,
+        required: false,
     },
     'Smart Info': {
         type: 'Buffer',
-        required: true,
+        required: false,
     },
     Master: {
         type: 'boolean',
-        required: true,
+        required: false,
     },
     Name: {
         type: 'string',
@@ -266,6 +266,6 @@ export const parsedPlaylistTypes: ValidationTypes<ParsedPlaylist> = {
     },
     Visible: {
         type: 'boolean',
-        required: true,
+        required: false,
     },
 };
