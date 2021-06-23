@@ -202,6 +202,10 @@ export const parsedTrackTypes: ValidationTypes<ParsedTrack> = {
         type: 'string',
         required: false,
     },
+    Disabled: {
+        type: 'boolean',
+        required: false,
+    },
     Genre: {
         type: 'string',
         required: false,
@@ -212,6 +216,10 @@ export const parsedTrackTypes: ValidationTypes<ParsedTrack> = {
     },
     Location: {
         type: 'string',
+        required: false,
+    },
+    Loved: {
+        type: 'boolean',
         required: false,
     },
     Name: {
@@ -284,7 +292,27 @@ export const parsedPlaylistTypes: ValidationTypes<ParsedPlaylist> = {
         type: 'Buffer',
         required: false,
     },
+    'TV Shows': {
+        type: 'boolean',
+        required: false,
+    },
+    Audiobooks: {
+        type: 'boolean',
+        required: false,
+    },
+    Folder: {
+        type: 'boolean',
+        required: false,
+    },
     Master: {
+        type: 'boolean',
+        required: false,
+    },
+    Movies: {
+        type: 'boolean',
+        required: false,
+    },
+    Music: {
         type: 'boolean',
         required: false,
     },

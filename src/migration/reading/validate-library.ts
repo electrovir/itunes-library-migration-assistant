@@ -97,25 +97,26 @@ function validateObject(
             {},
         );
         const invalidKeysMessage = invalidKeys.length
-            ? `Invalid ${name} keys:\n${JSON.stringify(invalidValues, null, 4)}`
+            ? `Invalid ${name} keys:\n\t\t${JSON.stringify(invalidValues, null, 4)
+                  .split('\n')
+                  .join('\n\t\t')}`
             : '';
         const missingKeysMessage = missingKeys.length
-            ? `Missing keys: ${missingKeys.join(', ')}`
+            ? `Missing ${name} keys:\n\t\t${missingKeys.join(', ')}`
             : '';
         const missingValidationKeysMessage = missingValidationKeys.length
-            ? `Missing validation for keys:\n${missingValidationKeys.join(', ')}`
+            ? `Missing ${name} validation for keys:\n\t\t${missingValidationKeys.join(', ')}`
             : '';
+        const errorMessages = [
+            invalidKeysMessage,
+            missingKeysMessage,
+            missingValidationKeysMessage,
+        ].filter((message) => !!message);
 
-        if (invalidKeys.length || missingKeys.length) {
+        if (errorMessages.length) {
             errors.push(
                 new LibraryValidationError(
-                    `${(input as {Name?: string}).Name} errors:\n${[
-                        invalidKeysMessage,
-                        missingKeysMessage,
-                        missingValidationKeysMessage,
-                    ]
-                        .filter((message) => !!message)
-                        .join('\n')}`,
+                    `${(input as {Name?: string}).Name} errors:\n\t${errorMessages.join('\n\t')}`,
                     nameTree.concat(name),
                 ),
             );
@@ -148,8 +149,8 @@ export function assertValidLibrary(
     );
 
     if (validationErrors.length) {
-        throw new Error(
-            validationErrors.map((validationError) => String(validationError)).join('\n'),
+        throw new LibraryValidationError(
+            '\n' + validationErrors.map((validationError) => validationError.message).join('\n'),
         );
     }
 }

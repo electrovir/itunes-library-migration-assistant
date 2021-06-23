@@ -47,9 +47,11 @@ export type ParsedTrack = {
     BPM?: number;
     Comments?: string;
     Composer?: string;
+    Disabled?: boolean;
     Genre?: string;
     Kind?: string;
     Location?: string;
+    Loved?: boolean;
     Name: string;
     Protected?: boolean;
     Purchased?: boolean;
@@ -70,15 +72,14 @@ export type ParsedPlaylist = {
     'Playlist Items'?: ParsedPlaylistItem[];
     'Playlist Persistent ID': string;
     'Purchased Music'?: boolean;
-    'Smart Criteria'?: {
-        type: string;
-        data: number[];
-    };
-    'Smart Info'?: {
-        type: string;
-        data: number[];
-    };
+    'Smart Criteria'?: Buffer;
+    'Smart Info'?: Buffer;
+    'TV Shows'?: boolean;
+    Audiobooks?: boolean;
+    Folder?: boolean;
     Master?: boolean;
+    Movies?: boolean;
+    Music?: boolean;
     Name: string;
     Visible?: boolean;
 };

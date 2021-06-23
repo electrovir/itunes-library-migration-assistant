@@ -11,6 +11,8 @@
         "opentag",
         "packagejson",
         "txml",
-        "itunes"
+        "itunes",
+        "Audiobooks",
+        "Gapless"
     ]
 }
