@@ -1,6 +1,7 @@
 import {existsSync} from 'fs';
 import {getEnumTypedValues} from '../augments/object';
 import {InvalidApiInputError} from '../errors/invalid-api-input-error';
+import {migrateLibrary} from '../migration/migrate-library';
 import {MigrationApiInput, MigrationOutput} from './api-types';
 
 export function assertValidApiInput(
@@ -40,7 +41,5 @@ export function assertValidApiInput(
 export function api(input: Readonly<MigrationApiInput>) {
     assertValidApiInput(input);
 
-    const {libraryFile, replacePaths} = input;
-
-    // migrateLibrary();
+    migrateLibrary(input);
 }

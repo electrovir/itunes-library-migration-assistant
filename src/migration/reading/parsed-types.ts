@@ -1,3 +1,5 @@
+export type ParsedTracks = Record<string, ParsedTrack>;
+
 export type ParsedLibrary = {
     'Application Version': string;
     Date: string;
@@ -8,7 +10,7 @@ export type ParsedLibrary = {
     'Music Folder': string;
     Playlists: ParsedPlaylist[];
     'Show Content Ratings': boolean;
-    Tracks: Record<string, ParsedTrack>;
+    Tracks: ParsedTracks;
 };
 
 export type ParsedTrack = {

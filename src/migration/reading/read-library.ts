@@ -5,7 +5,15 @@ import {LibraryParseError} from '../../errors/library-parse-error';
 import {ParsedLibrary} from './parsed-types';
 import {assertValidLibrary} from './validate-library';
 
-export function readLibrary(path: string, loggingEnabled = true): ParsedLibrary {
+export function readLibrary({
+    path,
+    loggingEnabled = true,
+    validationEnabled = true,
+}: {
+    path: string;
+    loggingEnabled?: boolean;
+    validationEnabled?: boolean;
+}): Readonly<ParsedLibrary> {
     if (!existsSync(path)) {
         throw new LibraryParseError(`Library file does not exist: ${path}`);
     }
@@ -24,9 +32,12 @@ export function readLibrary(path: string, loggingEnabled = true): ParsedLibrary 
         }
     }
 
-    loggingEnabled && console.info('Validation started...');
-    assertValidLibrary(parsedLibrary, basename(path));
-    loggingEnabled && console.info('Validation finished');
-
-    return parsedLibrary;
+    if (validationEnabled) {
+        loggingEnabled && console.info('Validation started...');
+        assertValidLibrary(parsedLibrary, basename(path));
+        loggingEnabled && console.info('Validation finished');
+        return parsedLibrary;
+    } else {
+        return parsedLibrary as ParsedLibrary;
+    }
 }

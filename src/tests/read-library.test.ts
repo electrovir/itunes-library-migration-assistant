@@ -8,7 +8,7 @@ testGroup({
         runTest({
             description: 'can read small sample library',
             test: () => {
-                readLibrary(getSampleFilePath('library-example.xml'));
+                readLibrary({path: getSampleFilePath('library-example.xml')});
             },
         });
 
@@ -18,7 +18,7 @@ testGroup({
             runTest({
                 description: 'can read full library',
                 test: () => {
-                    readLibrary(getOutputFilePath('library.xml'));
+                    readLibrary({path: getOutputFilePath('library.xml')});
                 },
             });
         } else {
