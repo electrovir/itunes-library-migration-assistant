@@ -1,17 +1,18 @@
 import {ParsedLibrary, ParsedPlaylist, ParsedPlaylistItem, ParsedTrack} from './parsed-types';
 
 type AcceptableTypeStrings =
-    | 'string'
-    | 'number'
     | 'bigint'
     | 'boolean'
+    | 'function'
+    | 'number'
+    | 'object'
+    | 'string'
     | 'symbol'
     | 'undefined'
-    | 'object'
-    | 'function'
+
     // special types
-    | 'Date'
-    | 'Buffer';
+    | 'Buffer'
+    | 'Date';
 
 export type ValidationTypes<KeySource> = Readonly<
     Record<keyof KeySource, {type: AcceptableTypeStrings; required: boolean}>
@@ -20,308 +21,400 @@ export type ValidationTypes<KeySource> = Readonly<
 /** The following objects are used for validation purposes */
 export const parsedLibraryTypes: ValidationTypes<ParsedLibrary> = {
     'Application Version': {
+        required: true,
         type: 'string',
-        required: true,
-    },
-    'Library Persistent ID': {
-        type: 'string',
-        required: true,
-    },
-    'Major Version': {
-        type: 'number',
-        required: true,
-    },
-    'Minor Version': {
-        type: 'number',
-        required: true,
-    },
-    'Music Folder': {
-        type: 'string',
-        required: true,
-    },
-    'Show Content Ratings': {
-        type: 'boolean',
-        required: true,
     },
     Date: {
-        type: 'Date',
         required: true,
+        type: 'Date',
     },
     Features: {
-        type: 'number',
         required: true,
+        type: 'number',
+    },
+    'Library Persistent ID': {
+        required: true,
+        type: 'string',
+    },
+    'Major Version': {
+        required: true,
+        type: 'number',
+    },
+    'Minor Version': {
+        required: true,
+        type: 'number',
+    },
+    'Music Folder': {
+        required: true,
+        type: 'string',
     },
     Playlists: {
-        type: 'object',
         required: true,
+        type: 'object',
+    },
+    'Show Content Ratings': {
+        required: true,
+        type: 'boolean',
     },
     Tracks: {
-        type: 'object',
         required: true,
+        type: 'object',
     },
 };
 
 export const parsedTrackTypes: ValidationTypes<ParsedTrack> = {
-    'Album Artist': {
+    Album: {
+        required: false,
         type: 'string',
-        required: false,
     },
-    'Album Rating Computed': {
-        type: 'boolean',
+    'Album Artist': {
         required: false,
+        type: 'string',
     },
     'Album Rating': {
+        required: false,
         type: 'number',
+    },
+    'Album Rating Computed': {
         required: false,
-    },
-    'Artwork Count': {
-        type: 'number',
-        required: false,
-    },
-    'Bit Rate': {
-        type: 'number',
-        required: false,
-    },
-    'Date Added': {
-        type: 'Date',
-        required: true,
-    },
-    'Date Modified': {
-        type: 'Date',
-        required: false,
-    },
-    'Disc Count': {
-        type: 'number',
-        required: false,
-    },
-    'Disc Number': {
-        type: 'number',
-        required: false,
-    },
-    'File Folder Count': {
-        type: 'number',
-        required: false,
-    },
-    'File Type': {
-        type: 'number',
-        required: false,
-    },
-    'Library Folder Count': {
-        type: 'number',
-        required: false,
-    },
-    'Part Of Gapless Album': {
         type: 'boolean',
-        required: false,
-    },
-    'Persistent ID': {
-        type: 'string',
-        required: true,
-    },
-    'Play Count': {
-        type: 'number',
-        required: false,
-    },
-    'Play Date UTC': {
-        type: 'Date',
-        required: false,
-    },
-    'Play Date': {
-        type: 'number',
-        required: false,
-    },
-    'Rating Computed': {
-        type: 'boolean',
-        required: false,
-    },
-    'Release Date': {
-        type: 'Date',
-        required: false,
-    },
-    'Sample Rate': {
-        type: 'number',
-        required: false,
-    },
-    'Skip Count': {
-        type: 'number',
-        required: false,
-    },
-    'Skip Date': {
-        type: 'Date',
-        required: false,
-    },
-    'Sort Album': {
-        type: 'string',
-        required: false,
-    },
-    'Sort Artist': {
-        type: 'string',
-        required: false,
-    },
-    'Sort Name': {
-        type: 'string',
-        required: false,
-    },
-    'Total Time': {
-        type: 'number',
-        required: false,
-    },
-    'Track Count': {
-        type: 'number',
-        required: false,
-    },
-    'Track ID': {
-        type: 'number',
-        required: true,
-    },
-    'Track Number': {
-        type: 'number',
-        required: false,
-    },
-    'Track Type': {
-        type: 'string',
-        required: true,
-    },
-    Album: {
-        type: 'string',
-        required: false,
     },
     Artist: {
-        type: 'string',
         required: false,
+        type: 'string',
+    },
+    'Artwork Count': {
+        required: false,
+        type: 'number',
+    },
+    'Bit Rate': {
+        required: false,
+        type: 'number',
     },
     BPM: {
-        type: 'number',
         required: false,
+        type: 'number',
+    },
+    Clean: {
+        required: false,
+        type: 'boolean',
     },
     Comments: {
-        type: 'string',
         required: false,
+        type: 'string',
+    },
+    Compilation: {
+        required: false,
+        type: 'boolean',
     },
     Composer: {
-        type: 'string',
         required: false,
+        type: 'string',
+    },
+    'Content Rating': {
+        required: false,
+        type: 'string',
+    },
+    'Date Added': {
+        required: true,
+        type: 'Date',
+    },
+    'Date Modified': {
+        required: false,
+        type: 'Date',
     },
     Disabled: {
-        type: 'boolean',
         required: false,
+        type: 'boolean',
+    },
+    'Disc Count': {
+        required: false,
+        type: 'number',
+    },
+    'Disc Number': {
+        required: false,
+        type: 'number',
+    },
+    Episode: {
+        required: false,
+        type: 'string',
+    },
+    'Episode Order': {
+        required: false,
+        type: 'number',
+    },
+    Equalizer: {
+        required: false,
+        type: 'string',
+    },
+    Explicit: {
+        required: false,
+        type: 'boolean',
+    },
+    'File Folder Count': {
+        required: false,
+        type: 'number',
+    },
+    'File Type': {
+        required: false,
+        type: 'number',
     },
     Genre: {
-        type: 'string',
         required: false,
+        type: 'string',
+    },
+    Grouping: {
+        required: false,
+        type: 'string',
+    },
+    'Has Video': {
+        required: false,
+        type: 'boolean',
     },
     Kind: {
-        type: 'string',
         required: false,
+        type: 'string',
+    },
+    'Library Folder Count': {
+        required: false,
+        type: 'number',
     },
     Location: {
-        type: 'string',
         required: false,
+        type: 'string',
     },
     Loved: {
-        type: 'boolean',
         required: false,
+        type: 'boolean',
+    },
+    Movie: {
+        required: false,
+        type: 'boolean',
+    },
+    'Music Video': {
+        required: false,
+        type: 'boolean',
     },
     Name: {
-        type: 'string',
         required: true,
+        type: 'string',
+    },
+    'Part Of Gapless Album': {
+        required: false,
+        type: 'boolean',
+    },
+    'Persistent ID': {
+        required: true,
+        type: 'string',
+    },
+    'Play Count': {
+        required: false,
+        type: 'number',
+    },
+    'Play Date': {
+        required: false,
+        type: 'number',
+    },
+    'Play Date UTC': {
+        required: false,
+        type: 'Date',
+    },
+    Podcast: {
+        required: false,
+        type: 'boolean',
     },
     Protected: {
-        type: 'boolean',
         required: false,
+        type: 'boolean',
     },
     Purchased: {
-        type: 'boolean',
         required: false,
+        type: 'boolean',
     },
     Rating: {
-        type: 'number',
         required: false,
+        type: 'number',
+    },
+    'Rating Computed': {
+        required: false,
+        type: 'boolean',
+    },
+    'Release Date': {
+        required: false,
+        type: 'Date',
+    },
+    'Sample Rate': {
+        required: false,
+        type: 'number',
+    },
+    Season: {
+        required: false,
+        type: 'number',
+    },
+    Series: {
+        required: false,
+        type: 'string',
     },
     Size: {
-        type: 'number',
         required: false,
+        type: 'number',
+    },
+    'Skip Count': {
+        required: false,
+        type: 'number',
+    },
+    'Skip Date': {
+        required: false,
+        type: 'Date',
+    },
+    'Sort Album': {
+        required: false,
+        type: 'string',
+    },
+    'Sort Album Artist': {
+        required: false,
+        type: 'string',
+    },
+    'Sort Artist': {
+        required: false,
+        type: 'string',
+    },
+    'Sort Composer': {
+        required: false,
+        type: 'string',
+    },
+    'Sort Name': {
+        required: false,
+        type: 'string',
+    },
+    'Sort Series': {
+        required: false,
+        type: 'string',
+    },
+    'Start Time': {
+        required: false,
+        type: 'number',
+    },
+    'Stop Time': {
+        required: false,
+        type: 'number',
+    },
+    'Total Time': {
+        required: false,
+        type: 'number',
+    },
+    'Track Count': {
+        required: false,
+        type: 'number',
+    },
+    'Track ID': {
+        required: true,
+        type: 'number',
+    },
+    'Track Number': {
+        required: false,
+        type: 'number',
+    },
+    'Track Type': {
+        required: true,
+        type: 'string',
+    },
+    'TV Show': {
+        required: false,
+        type: 'boolean',
+    },
+    Unplayed: {
+        required: false,
+        type: 'boolean',
+    },
+    'Volume Adjustment': {
+        required: false,
+        type: 'number',
+    },
+    Work: {
+        required: false,
+        type: 'string',
     },
     Year: {
-        type: 'number',
         required: false,
+        type: 'number',
     },
 };
 
 export const parsedPlaylistItemTypes: ValidationTypes<ParsedPlaylistItem> = {
     'Track ID': {
-        type: 'number',
         required: true,
+        type: 'number',
     },
 };
 
 export const parsedPlaylistTypes: ValidationTypes<ParsedPlaylist> = {
     'All Items': {
-        type: 'boolean',
         required: true,
-    },
-    'Distinguished Kind': {
-        type: 'number',
-        required: false,
-    },
-    'Parent Persistent ID': {
-        type: 'string',
-        required: false,
-    },
-    'Playlist ID': {
-        type: 'number',
-        required: true,
-    },
-    'Playlist Items': {
-        type: 'object',
-        required: false,
-    },
-    'Playlist Persistent ID': {
-        type: 'string',
-        required: true,
-    },
-    'Purchased Music': {
         type: 'boolean',
-        required: false,
-    },
-    'Smart Criteria': {
-        type: 'Buffer',
-        required: false,
-    },
-    'Smart Info': {
-        type: 'Buffer',
-        required: false,
-    },
-    'TV Shows': {
-        type: 'boolean',
-        required: false,
     },
     Audiobooks: {
-        type: 'boolean',
         required: false,
+        type: 'boolean',
+    },
+    'Distinguished Kind': {
+        required: false,
+        type: 'number',
     },
     Folder: {
-        type: 'boolean',
         required: false,
+        type: 'boolean',
     },
     Master: {
-        type: 'boolean',
         required: false,
+        type: 'boolean',
     },
     Movies: {
-        type: 'boolean',
         required: false,
+        type: 'boolean',
     },
     Music: {
-        type: 'boolean',
         required: false,
+        type: 'boolean',
     },
     Name: {
-        type: 'string',
         required: true,
+        type: 'string',
+    },
+    'Parent Persistent ID': {
+        required: false,
+        type: 'string',
+    },
+    'Playlist ID': {
+        required: true,
+        type: 'number',
+    },
+    'Playlist Items': {
+        required: false,
+        type: 'object',
+    },
+    'Playlist Persistent ID': {
+        required: true,
+        type: 'string',
+    },
+    'Purchased Music': {
+        required: false,
+        type: 'boolean',
+    },
+    'Smart Criteria': {
+        required: false,
+        type: 'Buffer',
+    },
+    'Smart Info': {
+        required: false,
+        type: 'Buffer',
+    },
+    'TV Shows': {
+        required: false,
+        type: 'boolean',
     },
     Visible: {
-        type: 'boolean',
         required: false,
+        type: 'boolean',
     },
 };
