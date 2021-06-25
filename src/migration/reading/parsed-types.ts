@@ -2,7 +2,7 @@ export type ParsedTracks = Record<string, ParsedTrack>;
 
 export type ParsedLibrary = {
     'Application Version': string;
-    Date: string;
+    Date: Date;
     Features: number;
     'Library Persistent ID': string;
     'Major Version': number;
@@ -27,8 +27,8 @@ export type ParsedTrack = {
     Compilation?: boolean;
     Composer?: string;
     'Content Rating'?: string;
-    'Date Added': string;
-    'Date Modified'?: string;
+    'Date Added': Date;
+    'Date Modified'?: Date;
     Disabled?: boolean;
     'Disc Count'?: number;
     'Disc Number'?: number;
@@ -51,7 +51,7 @@ export type ParsedTrack = {
     'Part Of Gapless Album'?: boolean;
     'Persistent ID': string;
     'Play Count'?: number;
-    'Play Date UTC'?: string;
+    'Play Date UTC'?: Date;
     'Play Date'?: number;
     Podcast?: boolean;
     Protected?: boolean;
@@ -64,7 +64,7 @@ export type ParsedTrack = {
     Series?: string;
     Size?: number;
     'Skip Count'?: number;
-    'Skip Date'?: string;
+    'Skip Date'?: Date;
     'Sort Album Artist'?: string;
     'Sort Album'?: string;
     'Sort Artist'?: string;
