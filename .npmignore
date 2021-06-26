@@ -6,3 +6,7 @@ src
 prettierignore
 tsconfig.json
 .cspell.json
+.gitignore
+samples
+.gitattributes
+output

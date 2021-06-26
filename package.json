@@ -1,9 +1,18 @@
 {
     "name": "itunes-library-migration-assistant",
     "version": "0.0.1",
-    "description": "",
+    "description": "iTunes Library Migration Assistant",
     "keywords": [
-        "vir"
+        "itunes",
+        "reader",
+        "plist",
+        "xml",
+        "location",
+        "library",
+        "migration",
+        "assistant",
+        "vir",
+        "electrovir"
     ],
     "homepage": "https://github.com/electrovir/itunes-library-migration-assistant#readme",
     "bugs": {
