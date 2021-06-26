@@ -35,7 +35,7 @@ export function makeNewLibrary({
 
             if (oldLocation) {
                 const replaced = replacePaths.some((replacePath, replacePathIndex) => {
-                    if (oldLocation.indexOf(replacePath.old)) {
+                    if (oldLocation.includes(replacePath.old)) {
                         newTrack.Location = oldLocation.replace(replacePath.old, replacePath.new);
                         ++replacePathUsage[replacePathIndex];
                         return true;

@@ -78,10 +78,14 @@ testGroup({
 
         runTest({
             description: 'unmodified locations are reported',
+            expectError: {
+                errorClass: LibraryMigrationError,
+                errorMessage: /^\s*This track location was not replaced/,
+            },
             test: () => {
                 const oldLibrary = getLibraryWithOtherPaths();
 
-                const newLibrary = makeNewLibrary({
+                makeNewLibrary({
                     oldLibrary,
                     replacePaths: [{old: 'sample/path', new: 'new/path'}],
                 });
