@@ -19,7 +19,7 @@ testGroup({
                     options: {
                         validationEnabled: true,
                         loggingEnabled: true,
-                        checkReplacementPaths: true,
+                        checkReplacementPaths: false,
                     },
                     outputType: MigrationOutput.WriteToFile,
                 }).filePath;
@@ -39,6 +39,9 @@ testGroup({
                 const outputPlist = migrateLibrary({
                     libraryFilePath,
                     replacePaths: [],
+                    options: {
+                        checkReplacementPaths: false,
+                    },
                     outputType: MigrationOutput.PlistString,
                 }).plist;
 
@@ -56,6 +59,9 @@ testGroup({
                 const outputObject = migrateLibrary({
                     libraryFilePath,
                     replacePaths: [],
+                    options: {
+                        checkReplacementPaths: false,
+                    },
                     outputType: MigrationOutput.JsonObject,
                 });
 
@@ -75,14 +81,18 @@ testGroup({
                 console.info = (...args: any[]) => {
                     infoLogs.push(...args);
                 };
-
-                migrateLibrary({
-                    libraryFilePath,
-                    replacePaths: [],
-                    outputType: MigrationOutput.JsonObject,
-                });
-
-                console.info = oldInfo;
+                try {
+                    migrateLibrary({
+                        libraryFilePath,
+                        replacePaths: [],
+                        options: {
+                            checkReplacementPaths: false,
+                        },
+                        outputType: MigrationOutput.JsonObject,
+                    });
+                } finally {
+                    console.info = oldInfo;
+                }
 
                 return infoLogs.length > 0;
             },
@@ -98,14 +108,18 @@ testGroup({
                 console.log = (...args: any[]) => {
                     logs.push(...args);
                 };
-
-                migrateLibrary({
-                    libraryFilePath,
-                    replacePaths: [],
-                    outputType: MigrationOutput.JsonObject,
-                });
-
-                console.log = oldLog;
+                try {
+                    migrateLibrary({
+                        libraryFilePath,
+                        replacePaths: [],
+                        options: {
+                            checkReplacementPaths: false,
+                        },
+                        outputType: MigrationOutput.JsonObject,
+                    });
+                } finally {
+                    console.log = oldLog;
+                }
 
                 return logs.length;
             },
@@ -121,15 +135,19 @@ testGroup({
                 console.info = (...args: any[]) => {
                     infoLogs.push(...args);
                 };
-
-                migrateLibrary({
-                    libraryFilePath,
-                    replacePaths: [],
-                    options: {loggingEnabled: false},
-                    outputType: MigrationOutput.JsonObject,
-                });
-
-                console.info = oldInfo;
+                try {
+                    migrateLibrary({
+                        libraryFilePath,
+                        replacePaths: [],
+                        options: {
+                            loggingEnabled: false,
+                            checkReplacementPaths: false,
+                        },
+                        outputType: MigrationOutput.JsonObject,
+                    });
+                } finally {
+                    console.info = oldInfo;
+                }
 
                 return infoLogs.length;
             },

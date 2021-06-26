@@ -1,7 +1,7 @@
 import {ReplacePath} from '../api/api-types';
 import {LibraryMigrationError} from '../errors/library-migration-error';
 import {LibraryParseError} from '../errors/library-parse-error';
-import {ParsedLibrary, ParsedTracks} from './reading/parsed-types';
+import {ParsedLibrary, ParsedTrack, ParsedTracks} from './reading/parsed-types';
 
 export function makeNewLibrary({
     oldLibrary,
@@ -27,23 +27,26 @@ export function makeNewLibrary({
                     `Track key "${trackKey}" didn't actually exist in the library`,
                 );
             }
-            const newTrack = {
+            const newTrack: ParsedTrack = {
                 ...oldTrack,
             };
 
             const oldLocation = newTrack.Location;
 
             if (oldLocation) {
-                replacePaths.some((replacePath, replacePathIndex) => {
+                const replaced = replacePaths.some((replacePath, replacePathIndex) => {
                     if (oldLocation.indexOf(replacePath.old)) {
                         newTrack.Location = oldLocation.replace(replacePath.old, replacePath.new);
                         ++replacePathUsage[replacePathIndex];
                         return true;
-                    } else {
-                        unreplacedPaths.add(oldLocation);
-                        return false;
                     }
+
+                    return false;
                 });
+
+                if (!replaced) {
+                    unreplacedPaths.add(oldLocation);
+                }
             }
 
             newTracks[trackKey] = newTrack;
@@ -73,7 +76,7 @@ export function makeNewLibrary({
         });
 
         if (errors.length) {
-            throw new LibraryMigrationError(errors.join('\n'));
+            throw new LibraryMigrationError('\n' + errors.join('\n'));
         }
     }
 

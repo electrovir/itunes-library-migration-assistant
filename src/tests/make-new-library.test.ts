@@ -2,6 +2,7 @@ import * as equal from 'fast-deep-equal';
 import {testGroup} from 'test-vir';
 import {LibraryMigrationError} from '../errors/library-migration-error';
 import {makeNewLibrary} from '../migration/make-new-library';
+import {ParsedLibrary} from '../migration/reading/parsed-types';
 import {getDummyLibrary} from './get-dummy-library';
 
 testGroup({
@@ -11,7 +12,11 @@ testGroup({
             description: 'library object should not get modified when no tracks are present',
             test: () => {
                 const oldLibrary = getDummyLibrary();
-                const newLibrary = makeNewLibrary({oldLibrary, replacePaths: []});
+                const newLibrary = makeNewLibrary({
+                    oldLibrary,
+                    replacePaths: [],
+                    checkReplacementPaths: false,
+                });
                 return equal(newLibrary, oldLibrary);
             },
         });
@@ -34,6 +39,55 @@ testGroup({
             },
         });
 
+        function getLibraryWithOtherPaths(): Readonly<ParsedLibrary> {
+            const dummyLibrary = getDummyLibrary();
+
+            const oldLibrary: Readonly<ParsedLibrary> = {
+                ...dummyLibrary,
+                Tracks: {
+                    ...dummyLibrary.Tracks,
+                    a: {
+                        'Date Added': new Date(),
+                        'Persistent ID': '0',
+                        'Track ID': 0,
+                        'Track Type': '',
+                        Name: '',
+                        Location: 'file:///other/path/to/file/a/the/file.mp3',
+                    },
+                    b: {
+                        'Date Added': new Date(),
+                        'Persistent ID': '0',
+                        'Track ID': 0,
+                        'Track Type': '',
+                        Name: '',
+                        Location: 'file:///other/path/to/file/b/the/file.mp3',
+                    },
+                    c: {
+                        'Date Added': new Date(),
+                        'Persistent ID': '0',
+                        'Track ID': 0,
+                        'Track Type': '',
+                        Name: '',
+                        Location: 'file:///other/path/to/file/c/the/file.mp3',
+                    },
+                },
+            };
+
+            return oldLibrary;
+        }
+
+        runTest({
+            description: 'unmodified locations are reported',
+            test: () => {
+                const oldLibrary = getLibraryWithOtherPaths();
+
+                const newLibrary = makeNewLibrary({
+                    oldLibrary,
+                    replacePaths: [{old: 'sample/path', new: 'new/path'}],
+                });
+            },
+        });
+
         function failReplacementPathCheck(
             // should default to true in makeNewLibrary
             checkReplacementPaths?: undefined | false,
@@ -53,7 +107,7 @@ testGroup({
             description: 'unused replacement paths should get reported',
             expectError: {
                 errorClass: LibraryMigrationError,
-                errorMessage: /^The following replacement was never used/,
+                errorMessage: /^\s*The following replacement was never used/,
             },
             test: () => {
                 failReplacementPathCheck();

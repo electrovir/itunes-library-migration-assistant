@@ -2,15 +2,15 @@ export type ParsedTracks = Record<string, ParsedTrack>;
 
 export type ParsedLibrary = {
     'Application Version': string;
-    Date: Date;
+    Date: Readonly<Date>;
     Features: number;
     'Library Persistent ID': string;
     'Major Version': number;
     'Minor Version': number;
     'Music Folder': string;
-    Playlists: ParsedPlaylist[];
+    Playlists: Readonly<Readonly<ParsedPlaylist>[]>;
     'Show Content Ratings': boolean;
-    Tracks: ParsedTracks;
+    Tracks: Readonly<ParsedTracks>;
 };
 
 export type ParsedTrack = {
@@ -27,8 +27,8 @@ export type ParsedTrack = {
     Compilation?: boolean;
     Composer?: string;
     'Content Rating'?: string;
-    'Date Added': Date;
-    'Date Modified'?: Date;
+    'Date Added': Readonly<Date>;
+    'Date Modified'?: Readonly<Date>;
     Disabled?: boolean;
     'Disc Count'?: number;
     'Disc Number'?: number;
@@ -51,20 +51,20 @@ export type ParsedTrack = {
     'Part Of Gapless Album'?: boolean;
     'Persistent ID': string;
     'Play Count'?: number;
-    'Play Date UTC'?: Date;
+    'Play Date UTC'?: Readonly<Date>;
     'Play Date'?: number;
     Podcast?: boolean;
     Protected?: boolean;
     Purchased?: boolean;
     'Rating Computed'?: boolean;
     Rating?: number;
-    'Release Date'?: Date;
+    'Release Date'?: Readonly<Date>;
     'Sample Rate'?: number;
     Season?: number;
     Series?: string;
     Size?: number;
     'Skip Count'?: number;
-    'Skip Date'?: Date;
+    'Skip Date'?: Readonly<Date>;
     'Sort Album Artist'?: string;
     'Sort Album'?: string;
     'Sort Artist'?: string;
@@ -100,11 +100,11 @@ export type ParsedPlaylist = {
     Name: string;
     'Parent Persistent ID'?: string;
     'Playlist ID': number;
-    'Playlist Items'?: ParsedPlaylistItem[];
+    'Playlist Items'?: Readonly<Readonly<ParsedPlaylistItem>[]>;
     'Playlist Persistent ID': string;
     'Purchased Music'?: boolean;
-    'Smart Criteria'?: Buffer;
-    'Smart Info'?: Buffer;
+    'Smart Criteria'?: Readonly<Buffer>;
+    'Smart Info'?: Readonly<Buffer>;
     'TV Shows'?: boolean;
     Visible?: boolean;
 };
