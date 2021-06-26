@@ -1,28 +1,35 @@
 import {existsSync, readFileSync} from 'fs';
-import {basename} from 'path';
 import {parse, PlistValue} from 'plist';
 import {LibraryParseError} from '../../errors/library-parse-error';
 import {ParsedLibrary} from './parsed-types';
 import {assertValidLibrary} from './validate-library';
 
-export function readLibrary({
-    path,
-    loggingEnabled = true,
-    validationEnabled = true,
-}: {
+export function readLibraryFile(inputs: {
     path: string;
     loggingEnabled?: boolean;
     validationEnabled?: boolean;
 }): Readonly<ParsedLibrary> {
-    if (!existsSync(path)) {
-        throw new LibraryParseError(`Library file does not exist: ${path}`);
+    if (!existsSync(inputs.path)) {
+        throw new LibraryParseError(`Library file does not exist: ${inputs.path}`);
     }
 
+    return readLibraryString({...inputs, libraryString: readFileSync(inputs.path).toString()});
+}
+
+export function readLibraryString({
+    libraryString,
+    loggingEnabled = true,
+    validationEnabled = true,
+}: {
+    libraryString: string;
+    loggingEnabled?: boolean;
+    validationEnabled?: boolean;
+}): Readonly<ParsedLibrary> {
     let parsedLibrary: Readonly<PlistValue>;
 
     try {
         loggingEnabled && console.info('Parsing started...');
-        parsedLibrary = parse(readFileSync(path).toString());
+        parsedLibrary = parse(libraryString);
         loggingEnabled && console.info('Parsing finished');
     } catch (error) {
         if (error instanceof LibraryParseError) {
@@ -34,7 +41,7 @@ export function readLibrary({
 
     if (validationEnabled) {
         loggingEnabled && console.info('Validation started...');
-        assertValidLibrary(parsedLibrary, basename(path));
+        assertValidLibrary(parsedLibrary);
         loggingEnabled && console.info('Validation finished');
         return parsedLibrary;
     } else {

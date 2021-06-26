@@ -21,9 +21,9 @@ export const defaultOptions: RunTimeOptions = {
     checkReplacementPaths: true,
 } as const;
 
-export type MigrationApiInput = {
-    libraryFile: string;
+export type MigrationApiInput<OutputType extends MigrationOutput = MigrationOutput> = {
+    libraryFilePath: string;
     replacePaths: Readonly<Readonly<ReplacePath>[]>;
-    outputType?: MigrationOutput;
+    outputType?: OutputType;
     options?: Readonly<RunTimeOptions>;
 };

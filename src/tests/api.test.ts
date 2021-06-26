@@ -5,7 +5,6 @@ import {InvalidApiInputError} from '../errors/invalid-api-input-error';
 import {getSampleFilePath} from './file-paths';
 
 testGroup({
-    description: 'api errors on invalid input',
     tests: (runTest) => {
         const mockReplacePaths: Readonly<Readonly<ReplacePath>[]> = [
             {old: 'empty-path', new: 'empty-path'},
@@ -14,12 +13,12 @@ testGroup({
         runTest({
             expectError: {
                 errorClass: InvalidApiInputError,
-                errorMessage: /Error in "libraryFile"/,
+                errorMessage: /Error in "libraryFilePath"/,
             },
-            description: 'for empty libraryFile',
+            description: 'for empty libraryFilePath',
             test: () => {
                 api({
-                    libraryFile: '',
+                    libraryFilePath: '',
                     replacePaths: mockReplacePaths,
                 });
             },
@@ -28,12 +27,12 @@ testGroup({
         runTest({
             expectError: {
                 errorClass: InvalidApiInputError,
-                errorMessage: /Error in "libraryFile"/,
+                errorMessage: /Error in "libraryFilePath"/,
             },
             description: 'for missing library file',
             test: () => {
                 api({
-                    libraryFile: 'this-is-not-a-real-file.invalid-extension',
+                    libraryFilePath: 'this-is-not-a-real-file.invalid-extension',
                     replacePaths: mockReplacePaths,
                 });
             },
@@ -47,7 +46,7 @@ testGroup({
             description: 'for empty replace paths',
             test: () => {
                 api({
-                    libraryFile: getSampleFilePath('library-example.xml'),
+                    libraryFilePath: getSampleFilePath('library-example.xml'),
                     replacePaths: [],
                 });
             },
@@ -61,7 +60,7 @@ testGroup({
             description: 'for empty replace paths',
             test: () => {
                 api({
-                    libraryFile: getSampleFilePath('library-example.xml'),
+                    libraryFilePath: getSampleFilePath('library-example.xml'),
                     replacePaths: [
                         {old: '', new: ''},
                         {old: 'old-thing', new: 'new-thing'},

@@ -1,39 +1,15 @@
 import * as equal from 'fast-deep-equal';
 import {testGroup} from 'test-vir';
 import {makeNewLibrary} from '../migration/make-new-library';
-import {ParsedLibrary} from '../migration/reading/parsed-types';
+import {getDummyLibrary} from './get-dummy-library';
 
 testGroup({
     tests: (runTest) => {
-        function getMockLibrary(): ParsedLibrary {
-            return {
-                'Application Version': '',
-                'Library Persistent ID': '',
-                'Major Version': 0,
-                'Minor Version': 0,
-                'Music Folder': '',
-                'Show Content Ratings': false,
-                Date: new Date(),
-                Features: 0,
-                Playlists: [],
-                Tracks: {
-                    '0': {
-                        'Date Added': new Date(),
-                        'Persistent ID': '0',
-                        'Track ID': 0,
-                        'Track Type': '',
-                        Name: '',
-                        Location: 'file:///sample/path.mp3',
-                    },
-                },
-            };
-        }
-
         runTest({
             expect: true,
             description: 'library object should not get modified when no tracks are present',
             test: () => {
-                const oldLibrary = getMockLibrary();
+                const oldLibrary = getDummyLibrary();
                 const newLibrary = makeNewLibrary({oldLibrary, replacePaths: []});
                 return equal(newLibrary, oldLibrary);
             },
@@ -43,7 +19,7 @@ testGroup({
             expect: true,
             description: 'track location should get modified',
             test: () => {
-                const oldLibrary = getMockLibrary();
+                const oldLibrary = getDummyLibrary();
                 const newLibrary = makeNewLibrary({
                     oldLibrary,
                     replacePaths: [{old: 'sample/path', new: 'new/path'}],
@@ -61,7 +37,7 @@ testGroup({
             expect: true,
             description: 'only track location should get modified',
             test: () => {
-                const oldLibrary = getMockLibrary();
+                const oldLibrary = getDummyLibrary();
                 const newLibrary = makeNewLibrary({
                     oldLibrary,
                     replacePaths: [{old: 'sample/path', new: 'new/path'}],

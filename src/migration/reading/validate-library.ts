@@ -126,12 +126,9 @@ function validateObject(
     return errors;
 }
 
-export function assertValidLibrary(
-    parsedLibrary: any,
-    fileName: string,
-): asserts parsedLibrary is ParsedLibrary {
+export function assertValidLibrary(parsedLibrary: any): asserts parsedLibrary is ParsedLibrary {
     const validationErrors = validateObject(
-        fileName,
+        'whole library',
         parsedLibrary,
         {
             types: parsedLibraryTypes,

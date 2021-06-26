@@ -1,6 +1,6 @@
 import {existsSync} from 'fs';
 import {testGroup} from 'test-vir';
-import {readLibrary} from '../migration/reading/read-library';
+import {readLibraryFile} from '../migration/reading/read-library';
 import {getOutputFilePath, getSampleFilePath} from './file-paths';
 
 testGroup({
@@ -8,7 +8,7 @@ testGroup({
         runTest({
             description: 'can read small sample library',
             test: () => {
-                readLibrary({path: getSampleFilePath('library-example.xml')});
+                readLibraryFile({path: getSampleFilePath('library-example.xml')});
             },
         });
 
@@ -18,7 +18,7 @@ testGroup({
             runTest({
                 description: 'can read full library',
                 test: () => {
-                    readLibrary({path: getOutputFilePath('library.xml')});
+                    readLibraryFile({path: getOutputFilePath('library.xml')});
                 },
             });
         } else {

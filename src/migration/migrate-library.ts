@@ -1,18 +1,43 @@
 import {defaultOptions, MigrationApiInput, MigrationOutput} from '../api/api-types';
 import {makeNewLibrary} from './make-new-library';
 import {outputLibrary} from './output-library';
-import {readLibrary} from './reading/read-library';
+import {ParsedLibrary} from './reading/parsed-types';
+import {readLibraryFile} from './reading/read-library';
 
 export function migrateLibrary({
-    libraryFile,
+    libraryFilePath,
+    replacePaths,
+    outputType,
+    options: rawOptions,
+}: MigrationApiInput<MigrationOutput.JsonObject>): ParsedLibrary;
+export function migrateLibrary({
+    libraryFilePath,
+    replacePaths,
+    outputType,
+    options: rawOptions,
+}: MigrationApiInput<MigrationOutput.WriteToFile>): {filePath: string};
+export function migrateLibrary({
+    libraryFilePath,
+    replacePaths,
+    outputType,
+    options: rawOptions,
+}: MigrationApiInput<MigrationOutput.PlistString>): {plist: string};
+export function migrateLibrary({
+    libraryFilePath,
+    replacePaths,
+    outputType,
+    options: rawOptions,
+}: MigrationApiInput): {filePath: string} | {plist: string} | ParsedLibrary;
+export function migrateLibrary({
+    libraryFilePath,
     replacePaths,
     outputType = MigrationOutput.WriteToFile,
     options: rawOptions = defaultOptions,
-}: MigrationApiInput) {
+}: MigrationApiInput): {filePath: string} | {plist: string} | ParsedLibrary {
     const options = {...defaultOptions, ...rawOptions};
 
-    const oldLibrary = readLibrary({
-        path: libraryFile,
+    const oldLibrary = readLibraryFile({
+        path: libraryFilePath,
         ...options,
     });
 
@@ -22,8 +47,8 @@ export function migrateLibrary({
         ...options,
     });
 
-    outputLibrary({
-        libraryFile,
+    return outputLibrary({
+        libraryFilePath,
         newLibrary,
         outputType,
         ...options,

@@ -7,14 +7,14 @@ import {MigrationApiInput, MigrationOutput} from './api-types';
 export function assertValidApiInput(
     input: Readonly<MigrationApiInput>,
 ): asserts input is MigrationApiInput {
-    if (!input.libraryFile) {
-        throw new InvalidApiInputError('libraryFile', 'Missing path.');
+    if (!input.libraryFilePath) {
+        throw new InvalidApiInputError('libraryFilePath', 'Missing path.');
     }
 
-    if (!existsSync(input.libraryFile)) {
+    if (!existsSync(input.libraryFilePath)) {
         throw new InvalidApiInputError(
-            'libraryFile',
-            'File does not exist: "${input.libraryFile}".',
+            'libraryFilePath',
+            'File does not exist: "${input.libraryFilePath}".',
         );
     }
 
