@@ -37,7 +37,7 @@ export function migrateLibrary({
     const options = {...defaultOptions, ...rawOptions};
 
     const oldLibrary = readLibraryFile({
-        path: libraryFilePath,
+        libraryFilePath: libraryFilePath,
         ...options,
     });
 

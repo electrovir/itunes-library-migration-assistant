@@ -5,15 +5,18 @@ import {ParsedLibrary} from './parsed-types';
 import {assertValidLibrary} from './validate-library';
 
 export function readLibraryFile(inputs: {
-    path: string;
+    libraryFilePath: string;
     loggingEnabled?: boolean;
     validationEnabled?: boolean;
 }): Readonly<ParsedLibrary> {
-    if (!existsSync(inputs.path)) {
-        throw new LibraryParseError(`Library file does not exist: ${inputs.path}`);
+    if (!existsSync(inputs.libraryFilePath)) {
+        throw new LibraryParseError(`Library file does not exist: ${inputs.libraryFilePath}`);
     }
 
-    return readLibraryString({...inputs, libraryString: readFileSync(inputs.path).toString()});
+    return readLibraryString({
+        ...inputs,
+        libraryString: readFileSync(inputs.libraryFilePath).toString(),
+    });
 }
 
 export function readLibraryString({

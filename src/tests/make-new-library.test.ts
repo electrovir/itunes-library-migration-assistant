@@ -1,5 +1,6 @@
 import * as equal from 'fast-deep-equal';
 import {testGroup} from 'test-vir';
+import {LibraryMigrationError} from '../errors/library-migration-error';
 import {makeNewLibrary} from '../migration/make-new-library';
 import {getDummyLibrary} from './get-dummy-library';
 
@@ -30,6 +31,39 @@ testGroup({
                 return (
                     !!location && location.includes('new/path') && !location.includes('sample/path')
                 );
+            },
+        });
+
+        function failReplacementPathCheck(
+            // should default to true in makeNewLibrary
+            checkReplacementPaths?: undefined | false,
+        ) {
+            const oldLibrary = getDummyLibrary();
+            makeNewLibrary({
+                oldLibrary,
+                replacePaths: [
+                    {old: 'sample/path', new: 'new/path'},
+                    {old: 'gibberish not a real path', new: 'fake path'},
+                ],
+                checkReplacementPaths,
+            });
+        }
+
+        runTest({
+            description: 'unused replacement paths should get reported',
+            expectError: {
+                errorClass: LibraryMigrationError,
+                errorMessage: /^The following replacement was never used/,
+            },
+            test: () => {
+                failReplacementPathCheck();
+            },
+        });
+
+        runTest({
+            description: 'unused replacement paths are ignored when the checks are turned off',
+            test: () => {
+                failReplacementPathCheck(false);
             },
         });
 

@@ -25,5 +25,5 @@ export type MigrationApiInput<OutputType extends MigrationOutput = MigrationOutp
     libraryFilePath: string;
     replacePaths: Readonly<Readonly<ReplacePath>[]>;
     outputType?: OutputType;
-    options?: Readonly<RunTimeOptions>;
+    options?: Readonly<Partial<RunTimeOptions>>;
 };
