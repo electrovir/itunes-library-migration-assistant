@@ -24,7 +24,17 @@ const migratedLibraryFilePath = migrateLibrary({
     replacePaths: [
         {
             old: 'my/old/path/to/file',
+            /**
+             * Tracks that match the above "old" path will have that part of their path overwritten
+             * with the below "new" path.
+             */
             new: 'my/fancy/new/path/to/file',
+        },
+        {
+            old: 'old/path/to/files/that/no/longer/exist',
+
+            /** Tracks that match the above "old" path simply won't exist in the final output. */
+            delete: true,
         },
     ],
     options: {
@@ -38,7 +48,7 @@ const migratedLibraryFilePath = migrateLibrary({
 
 ## CommonJS
 
-```Javascript
+```typescript
 const migration = require('itunes-library-migration-assistant');
 
 const migratedLibraryFilePath = migration.migrateLibrary({
@@ -46,7 +56,17 @@ const migratedLibraryFilePath = migration.migrateLibrary({
     replacePaths: [
         {
             old: 'my/old/path/to/file',
+            /**
+             * Tracks that match the above "old" path will have that part of their path overwritten
+             * with the below "new" path.
+             */
             new: 'my/fancy/new/path/to/file',
+        },
+        {
+            old: 'old/path/to/files/that/no/longer/exist',
+
+            /** Tracks that match the above "old" path simply won't exist in the final output. */
+            delete: true,
         },
     ],
     options: {

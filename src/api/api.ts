@@ -23,7 +23,11 @@ export function assertValidApiInput(
     }
 
     const invalidPaths = input.replacePaths.filter((replacePath) => {
-        return replacePath.new && replacePath.old;
+        return !(
+            replacePath.old &&
+            (('delete' in replacePath && replacePath.delete) ||
+                ('new' in replacePath && replacePath.new))
+        );
     });
 
     if (invalidPaths.length) {

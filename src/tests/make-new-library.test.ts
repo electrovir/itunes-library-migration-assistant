@@ -150,5 +150,49 @@ testGroup({
                 return equal(oldLibrary, newLibrary);
             },
         });
+
+        runTest({
+            expect: true,
+            description: 'tracks marked for deletion should not be included in output',
+            test: () => {
+                const dummyLibrary = getDummyLibrary();
+                const oldLibrary: Readonly<ParsedLibrary> = {
+                    ...dummyLibrary,
+                    Tracks: {
+                        ...dummyLibrary.Tracks,
+                        'time to delete': {
+                            'Date Added': new Date(),
+                            'Persistent ID': '0',
+                            'Track ID': 0,
+                            'Track Type': '',
+                            Name: '',
+                            Location: 'file:///something/else/path.mp3',
+                        },
+                    },
+                };
+
+                const newLibrary = makeNewLibrary({
+                    oldLibrary,
+                    replacePaths: [
+                        {
+                            old: 'sample/path',
+                            new: 'new/path',
+                        },
+                        {
+                            old: 'something/else',
+                            delete: true,
+                        },
+                    ],
+                });
+                const newTrack = newLibrary.Tracks['0'];
+                if (!newTrack) {
+                    throw new Error('New track was not defined');
+                }
+
+                return !!(
+                    Object.keys(newLibrary.Tracks).length && newTrack.Location?.includes('new/path')
+                );
+            },
+        });
     },
 });

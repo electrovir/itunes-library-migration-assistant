@@ -3,6 +3,13 @@ export type ReplacePath = {
     new: string;
 };
 
+export type DeletePath = {
+    old: string;
+    delete: true;
+};
+
+export type InputPath = DeletePath | ReplacePath;
+
 export enum MigrationOutput {
     WriteToFile = 'write-to-file',
     JsonObject = 'json-object',
@@ -23,7 +30,7 @@ export const defaultOptions: RunTimeOptions = {
 
 export type MigrationApiInput<OutputType extends MigrationOutput = MigrationOutput> = {
     libraryFilePath: string;
-    replacePaths: Readonly<Readonly<ReplacePath>[]>;
+    replacePaths: Readonly<Readonly<InputPath>[]>;
     outputType?: OutputType;
     options?: Readonly<Partial<RunTimeOptions>>;
 };

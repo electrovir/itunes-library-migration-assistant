@@ -1,4 +1,4 @@
-import {ReplacePath} from '../api/api-types';
+import {InputPath} from '../api/api-types';
 import {LibraryMigrationError} from '../errors/library-migration-error';
 import {LibraryParseError} from '../errors/library-parse-error';
 import {ParsedLibrary, ParsedTrack, ParsedTracks} from './reading/parsed-types';
@@ -10,7 +10,7 @@ export function makeNewLibrary({
     loggingEnabled = true,
 }: Readonly<{
     oldLibrary: Readonly<ParsedLibrary>;
-    replacePaths: Readonly<Readonly<ReplacePath>[]>;
+    replacePaths: Readonly<Readonly<InputPath>[]>;
     checkReplacementPaths?: boolean;
     loggingEnabled?: boolean;
 }>): Readonly<ParsedLibrary> {
@@ -32,16 +32,36 @@ export function makeNewLibrary({
             };
 
             const oldLocation = newTrack.Location;
+            let markedForDeletion = false;
 
             if (oldLocation) {
                 const replaced = replacePaths.some((replacePath, replacePathIndex) => {
+                    let used = false;
+
                     if (oldLocation.includes(replacePath.old)) {
-                        newTrack.Location = oldLocation.replace(replacePath.old, replacePath.new);
-                        ++replacePathUsage[replacePathIndex];
-                        return true;
+                        if ('delete' in replacePath && replacePath.delete) {
+                            markedForDeletion = true;
+                            used = true;
+                        } else if ('new' in replacePath && replacePath.new) {
+                            newTrack.Location = oldLocation.replace(
+                                replacePath.old,
+                                replacePath.new,
+                            );
+                            used = true;
+                        } else {
+                            throw new LibraryMigrationError(
+                                `Replace path contained neither valid .new or valid .delete: ${JSON.stringify(
+                                    replacePath,
+                                )}`,
+                            );
+                        }
                     }
 
-                    return false;
+                    if (used) {
+                        ++replacePathUsage[replacePathIndex];
+                    }
+
+                    return used;
                 });
 
                 if (!replaced) {
@@ -49,7 +69,9 @@ export function makeNewLibrary({
                 }
             }
 
-            newTracks[trackKey] = newTrack;
+            if (!markedForDeletion) {
+                newTracks[trackKey] = newTrack;
+            }
 
             return newTracks;
         }, {}),
