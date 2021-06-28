@@ -51,7 +51,7 @@ export function makeNewLibrary({
                                 replacePath.old,
                                 replacePath.new,
                             );
-                            if (checkFiles && !existsSync(newTrack.Location)) {
+                            if (checkFiles && !existsSync(newTrack.Location.replace('%20', ' '))) {
                                 missingFiles.push({old: oldLocation, new: newTrack.Location});
                             }
                             used = true;
