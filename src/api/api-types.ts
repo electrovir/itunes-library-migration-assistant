@@ -20,12 +20,14 @@ export type RunTimeOptions = {
     validationEnabled: boolean;
     loggingEnabled: boolean;
     checkReplacementPaths: boolean;
+    checkFiles: boolean;
 };
 
 export const defaultOptions: RunTimeOptions = {
     validationEnabled: true,
     loggingEnabled: true,
     checkReplacementPaths: true,
+    checkFiles: false,
 } as const;
 
 export type MigrationApiInput<OutputType extends MigrationOutput = MigrationOutput> = {

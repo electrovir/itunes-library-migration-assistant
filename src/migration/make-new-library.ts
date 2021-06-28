@@ -1,4 +1,5 @@
-import {InputPath} from '../api/api-types';
+import {existsSync} from 'fs';
+import {InputPath, ReplacePath} from '../api/api-types';
 import {LibraryMigrationError} from '../errors/library-migration-error';
 import {LibraryParseError} from '../errors/library-parse-error';
 import {ParsedLibrary, ParsedTrack, ParsedTracks} from './reading/parsed-types';
@@ -8,14 +9,17 @@ export function makeNewLibrary({
     replacePaths,
     checkReplacementPaths = true,
     loggingEnabled = true,
+    checkFiles = false,
 }: Readonly<{
     oldLibrary: Readonly<ParsedLibrary>;
     replacePaths: Readonly<Readonly<InputPath>[]>;
     checkReplacementPaths?: boolean;
     loggingEnabled?: boolean;
+    checkFiles?: boolean;
 }>): Readonly<ParsedLibrary> {
     const unreplacedPaths = new Set<string>();
     const replacePathUsage = replacePaths.map(() => 0);
+    const missingFiles: ReplacePath[] = [];
 
     loggingEnabled && console.info(`Replacing locations...`);
     const newLibrary: Readonly<ParsedLibrary> = {
@@ -47,6 +51,9 @@ export function makeNewLibrary({
                                 replacePath.old,
                                 replacePath.new,
                             );
+                            if (checkFiles && !existsSync(newTrack.Location)) {
+                                missingFiles.push(replacePath);
+                            }
                             used = true;
                         } else {
                             throw new LibraryMigrationError(
@@ -78,9 +85,9 @@ export function makeNewLibrary({
     };
     loggingEnabled && console.info(`Replacing finished`);
 
-    if (checkReplacementPaths) {
-        const errors: string[] = [];
+    const errors: string[] = [];
 
+    if (checkReplacementPaths) {
         unreplacedPaths.forEach((path) => {
             errors.push(`This track location was not replaced:\n\t\t\t${path}`);
         });
@@ -96,11 +103,21 @@ export function makeNewLibrary({
                 );
             }
         });
-
-        if (errors.length) {
-            throw new LibraryMigrationError('\n' + errors.join('\n'));
-        }
     }
 
+    if (missingFiles.length) {
+        missingFiles.forEach((missingFile) => {
+            errors.push(
+                `\tMissing file:\n\t\t${JSON.stringify(missingFile, null, '\t\t\t').replace(
+                    /}$/,
+                    '\t\t}',
+                )}`,
+            );
+        });
+    }
+
+    if (errors.length) {
+        throw new LibraryMigrationError('\n' + errors.join('\n'));
+    }
     return newLibrary;
 }

@@ -95,6 +95,7 @@ testGroup({
         function failReplacementPathCheck(
             // should default to true in makeNewLibrary
             checkReplacementPaths?: undefined | false,
+            checkFiles?: undefined | true,
         ) {
             const oldLibrary = getDummyLibrary();
             makeNewLibrary({
@@ -104,6 +105,7 @@ testGroup({
                     {old: 'gibberish not a real path', new: 'fake path'},
                 ],
                 checkReplacementPaths,
+                checkFiles,
             });
         }
 
@@ -122,6 +124,17 @@ testGroup({
             description: 'unused replacement paths are ignored when the checks are turned off',
             test: () => {
                 failReplacementPathCheck(false);
+            },
+        });
+
+        runTest({
+            description: 'missing files throw error',
+            expectError: {
+                errorClass: LibraryMigrationError,
+                errorMessage: /^\s*Missing file:/,
+            },
+            test: () => {
+                failReplacementPathCheck(false, true);
             },
         });
 

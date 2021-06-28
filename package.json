@@ -1,6 +1,6 @@
 {
     "name": "itunes-library-migration-assistant",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "iTunes Library Migration Assistant",
     "keywords": [
         "itunes",
@@ -27,7 +27,7 @@
     "main": "dist/index.js",
     "scripts": {
         "compile": "rm -rf dist && tsc",
-        "prepublishOnly": "npm run test:full",
+        "prepublishOnly": "rm -rf node_modules && npm install && npm run test:full",
         "test:full": "npm run test && npm run spellcheck && npm run format:check",
         "test": "npm run compile && test-vir \"./dist/**/!(*.type|*.speed|*.sample).test.js\"",
         "test:speed": "npm run compile && test-vir \"./dist/**/*.speed.test.js\"",
