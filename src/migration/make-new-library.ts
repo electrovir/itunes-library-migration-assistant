@@ -1,5 +1,6 @@
 import {existsSync} from 'fs';
 import {InputPath, ReplacePath} from '../api/api-types';
+import {sanitizeLocation} from '../augments/string';
 import {LibraryMigrationError} from '../errors/library-migration-error';
 import {LibraryParseError} from '../errors/library-parse-error';
 import {ParsedLibrary, ParsedTrack, ParsedTracks} from './reading/parsed-types';
@@ -51,8 +52,11 @@ export function makeNewLibrary({
                                 replacePath.old,
                                 replacePath.new,
                             );
-                            if (checkFiles && !existsSync(newTrack.Location.replace('%20', ' '))) {
-                                missingFiles.push({old: oldLocation, new: newTrack.Location});
+                            if (checkFiles && !existsSync(sanitizeLocation(newTrack.Location))) {
+                                missingFiles.push({
+                                    old: sanitizeLocation(oldLocation),
+                                    new: sanitizeLocation(newTrack.Location),
+                                });
                             }
                             used = true;
                         } else {
