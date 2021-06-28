@@ -52,7 +52,7 @@ export function makeNewLibrary({
                                 replacePath.new,
                             );
                             if (checkFiles && !existsSync(newTrack.Location)) {
-                                missingFiles.push(replacePath);
+                                missingFiles.push({old: oldLocation, new: newTrack.Location});
                             }
                             used = true;
                         } else {
