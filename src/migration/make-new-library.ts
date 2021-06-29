@@ -52,7 +52,11 @@ export function makeNewLibrary({
                                 replacePath.old,
                                 replacePath.new,
                             );
-                            if (checkFiles && !existsSync(sanitizeLocation(newTrack.Location))) {
+                            if (
+                                checkFiles &&
+                                !newTrack.Location.startsWith('http') &&
+                                !existsSync(sanitizeLocation(newTrack.Location))
+                            ) {
                                 missingFiles.push({
                                     old: sanitizeLocation(oldLocation),
                                     new: sanitizeLocation(newTrack.Location),
