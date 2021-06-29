@@ -1,6 +1,7 @@
 import {existsSync} from 'fs';
 import {InputPath, ReplacePath} from '../api/api-types';
 import {decodeLocation, encodeLocation} from '../augments/string';
+import {RequiredBy} from '../augments/type';
 import {LibraryMigrationError} from '../errors/library-migration-error';
 import {LibraryParseError} from '../errors/library-parse-error';
 import {ParsedLibrary, ParsedTrack, ParsedTracks} from './reading/parsed-types';
@@ -32,36 +33,40 @@ export function makeNewLibrary({
                     `Track key "${trackKey}" didn't actually exist in the library`,
                 );
             }
-            const newTrack: ParsedTrack = {
+            let rawNewTrack: ParsedTrack = {
                 ...oldTrack,
             };
 
-            const oldLocation = newTrack.Location;
+            const originalLocation = rawNewTrack.Location;
             let markedForDeletion = false;
 
-            if (oldLocation) {
-                const replaced = replacePaths.some((replacePath, replacePathIndex) => {
+            if (originalLocation) {
+                const updatingTrack: RequiredBy<ParsedTrack, 'Location'> = {
+                    ...rawNewTrack,
+                } as RequiredBy<ParsedTrack, 'Location'>;
+
+                const replaced = replacePaths.reduce((replaced, replacePath, replacePathIndex) => {
                     let used = false;
 
                     if (
-                        oldLocation.includes(replacePath.old) ||
-                        decodeLocation(oldLocation).includes(replacePath.old)
+                        updatingTrack.Location.includes(replacePath.old) ||
+                        decodeLocation(updatingTrack.Location).includes(replacePath.old)
                     ) {
                         if ('delete' in replacePath && replacePath.delete) {
                             markedForDeletion = true;
                             used = true;
                         } else if ('new' in replacePath && replacePath.new) {
-                            newTrack.Location = oldLocation.replace(
+                            updatingTrack.Location = updatingTrack.Location.replace(
                                 replacePath.old,
                                 replacePath.new,
                             );
                             if (
-                                newTrack.Location === oldLocation &&
-                                !oldLocation.startsWith('http')
+                                updatingTrack.Location === updatingTrack.Location &&
+                                !updatingTrack.Location.startsWith('http')
                             ) {
                                 // try with sanitization
-                                newTrack.Location = encodeLocation(
-                                    decodeLocation(oldLocation).replace(
+                                updatingTrack.Location = encodeLocation(
+                                    decodeLocation(updatingTrack.Location).replace(
                                         replacePath.old,
                                         replacePath.new,
                                     ),
@@ -70,12 +75,12 @@ export function makeNewLibrary({
 
                             if (
                                 checkFiles &&
-                                !newTrack.Location.startsWith('http') &&
-                                !existsSync(decodeLocation(newTrack.Location))
+                                !updatingTrack.Location.startsWith('http') &&
+                                !existsSync(decodeLocation(updatingTrack.Location))
                             ) {
                                 missingFiles.push({
-                                    old: decodeLocation(oldLocation),
-                                    new: decodeLocation(newTrack.Location),
+                                    old: decodeLocation(originalLocation),
+                                    new: decodeLocation(updatingTrack.Location),
                                 });
                             }
                             used = true;
@@ -92,16 +97,18 @@ export function makeNewLibrary({
                         ++replacePathUsage[replacePathIndex];
                     }
 
-                    return used;
-                });
+                    return replaced || used;
+                }, false);
 
                 if (!replaced) {
-                    unreplacedPaths.add(oldLocation);
+                    unreplacedPaths.add(originalLocation);
                 }
+
+                rawNewTrack = updatingTrack;
             }
 
             if (!markedForDeletion) {
-                newTracks[trackKey] = newTrack;
+                newTracks[trackKey] = rawNewTrack;
             }
 
             return newTracks;
