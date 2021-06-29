@@ -1,6 +1,6 @@
 import {existsSync} from 'fs';
 import {InputPath, ReplacePath} from '../api/api-types';
-import {sanitizeLocation} from '../augments/string';
+import {decodeLocation, encodeLocation} from '../augments/string';
 import {LibraryMigrationError} from '../errors/library-migration-error';
 import {LibraryParseError} from '../errors/library-parse-error';
 import {ParsedLibrary, ParsedTrack, ParsedTracks} from './reading/parsed-types';
@@ -53,13 +53,26 @@ export function makeNewLibrary({
                                 replacePath.new,
                             );
                             if (
+                                newTrack.Location === oldLocation &&
+                                !oldLocation.startsWith('http')
+                            ) {
+                                // try with sanitization
+                                newTrack.Location = encodeLocation(
+                                    decodeLocation(oldLocation).replace(
+                                        replacePath.old,
+                                        replacePath.new,
+                                    ),
+                                );
+                            }
+
+                            if (
                                 checkFiles &&
                                 !newTrack.Location.startsWith('http') &&
-                                !existsSync(sanitizeLocation(newTrack.Location))
+                                !existsSync(decodeLocation(newTrack.Location))
                             ) {
                                 missingFiles.push({
-                                    old: sanitizeLocation(oldLocation),
-                                    new: sanitizeLocation(newTrack.Location),
+                                    old: decodeLocation(oldLocation),
+                                    new: decodeLocation(newTrack.Location),
                                 });
                             }
                             used = true;
