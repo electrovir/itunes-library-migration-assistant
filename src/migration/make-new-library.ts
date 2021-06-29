@@ -43,7 +43,10 @@ export function makeNewLibrary({
                 const replaced = replacePaths.some((replacePath, replacePathIndex) => {
                     let used = false;
 
-                    if (oldLocation.includes(replacePath.old)) {
+                    if (
+                        oldLocation.includes(replacePath.old) ||
+                        decodeLocation(oldLocation).includes(replacePath.old)
+                    ) {
                         if ('delete' in replacePath && replacePath.delete) {
                             markedForDeletion = true;
                             used = true;
