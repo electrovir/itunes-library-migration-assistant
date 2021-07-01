@@ -72,17 +72,6 @@ export function makeNewLibrary({
                                     ),
                                 );
                             }
-
-                            if (
-                                checkFiles &&
-                                !updatingTrack.Location.startsWith('http') &&
-                                !existsSync(decodeLocation(updatingTrack.Location))
-                            ) {
-                                missingFiles.push({
-                                    old: decodeLocation(originalLocation),
-                                    new: decodeLocation(updatingTrack.Location),
-                                });
-                            }
                             used = true;
                         } else {
                             throw new LibraryMigrationError(
@@ -100,7 +89,19 @@ export function makeNewLibrary({
                     return replaced || used;
                 }, false);
 
-                if (!replaced) {
+                if (replaced) {
+                    if (
+                        !markedForDeletion &&
+                        checkFiles &&
+                        !updatingTrack.Location.startsWith('http') &&
+                        !existsSync(decodeLocation(updatingTrack.Location))
+                    ) {
+                        missingFiles.push({
+                            old: decodeLocation(originalLocation),
+                            new: decodeLocation(updatingTrack.Location),
+                        });
+                    }
+                } else {
                     unreplacedPaths.add(originalLocation);
                 }
 
