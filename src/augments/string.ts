@@ -16,11 +16,19 @@ export function encodeLocation(location: string): string {
         return location;
     }
 
-    return encodeURI(
-        location
-            .replace(/\?/g, '%3F')
-            .replace(/^\//, 'file:///')
+    return (
+        encodeURI(
+            location
+                // force multiline with this comment :P
+                .replace(/\?/g, '%3F')
+                .replace(/^\//, 'file:///')
+                .replace(/#/g, '%23'),
+        )
+            /**
+             * This last semicolon replacement is not in the exact opposite order as its decoding in
+             * decodeLocation but apparently doing the exact opposite order above results in
+             * non-identical outputs.
+             */
             .replace(/;/g, '%3B')
-            .replace(/#/g, '%23'),
     );
 }

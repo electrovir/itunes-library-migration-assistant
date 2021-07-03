@@ -12,7 +12,6 @@ export function makeNewLibrary({
     checkReplacementPaths = true,
     loggingEnabled = true,
     checkFiles = false,
-    removeRatingComputed = false,
     extraTrackProcessing = (track) => track,
 }: Readonly<{
     oldLibrary: Readonly<ParsedLibrary>;
@@ -20,7 +19,6 @@ export function makeNewLibrary({
     checkReplacementPaths?: boolean;
     loggingEnabled?: boolean;
     checkFiles?: boolean;
-    removeRatingComputed?: boolean;
     extraTrackProcessing?: MigrationApiInput['extraTrackProcessing'];
 }>): Readonly<ParsedLibrary> {
     const unreplacedPaths = new Set<string>();
@@ -41,11 +39,6 @@ export function makeNewLibrary({
             let rawNewTrack: ParsedTrack = {
                 ...oldTrack,
             };
-
-            if (removeRatingComputed) {
-                delete rawNewTrack['Rating Computed'];
-                delete rawNewTrack['Album Rating Computed'];
-            }
 
             const originalLocation = rawNewTrack.Location;
             let markedForDeletion = false;

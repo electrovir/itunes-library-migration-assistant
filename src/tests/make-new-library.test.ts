@@ -40,54 +40,54 @@ testGroup({
             },
         });
 
-        runTest({
-            expect: true,
-            description: 'rating calculated should get removed',
-            test: () => {
-                const dummyLibrary = getDummyLibrary();
-                const ratingCalculatedKey = 'Rating Computed' as const;
-                const albumRatingCalculatedKey = 'Album Rating Computed' as const;
+        // runTest({
+        //     expect: true,
+        //     description: 'rating calculated should get removed',
+        //     test: () => {
+        //         const dummyLibrary = getDummyLibrary();
+        //         const ratingCalculatedKey = 'Rating Computed' as const;
+        //         const albumRatingCalculatedKey = 'Album Rating Computed' as const;
 
-                const dummyTrack = dummyLibrary.Tracks['0'];
+        //         const dummyTrack = dummyLibrary.Tracks['0'];
 
-                if (!dummyTrack) {
-                    throw new Error(`dummy track missing`);
-                }
+        //         if (!dummyTrack) {
+        //             throw new Error(`dummy track missing`);
+        //         }
 
-                const oldTrack = {
-                    ...dummyTrack,
-                    Rating: 100,
-                    [ratingCalculatedKey]: true,
-                    [albumRatingCalculatedKey]: true,
-                };
+        //         const oldTrack = {
+        //             ...dummyTrack,
+        //             Rating: 100,
+        //             [ratingCalculatedKey]: true,
+        //             [albumRatingCalculatedKey]: true,
+        //         };
 
-                const oldLibrary: Readonly<ParsedLibrary> = {
-                    ...dummyLibrary,
-                    Tracks: {
-                        '0': oldTrack,
-                    },
-                };
+        //         const oldLibrary: Readonly<ParsedLibrary> = {
+        //             ...dummyLibrary,
+        //             Tracks: {
+        //                 '0': oldTrack,
+        //             },
+        //         };
 
-                const newLibrary = makeNewLibrary({
-                    oldLibrary,
-                    replacePaths: [{old: 'sample/path', new: 'new/path'}],
-                    removeRatingComputed: true,
-                });
+        //         const newLibrary = makeNewLibrary({
+        //             oldLibrary,
+        //             replacePaths: [{old: 'sample/path', new: 'new/path'}],
+        //             removeRatingComputed: true,
+        //         });
 
-                const newTrack = newLibrary.Tracks['0'];
+        //         const newTrack = newLibrary.Tracks['0'];
 
-                if (!newTrack) {
-                    throw new Error('New track was not found');
-                }
+        //         if (!newTrack) {
+        //             throw new Error('New track was not found');
+        //         }
 
-                return (
-                    oldTrack.hasOwnProperty(ratingCalculatedKey) &&
-                    !newTrack.hasOwnProperty(ratingCalculatedKey) &&
-                    oldTrack.hasOwnProperty(albumRatingCalculatedKey) &&
-                    !newTrack.hasOwnProperty(albumRatingCalculatedKey)
-                );
-            },
-        });
+        //         return (
+        //             oldTrack.hasOwnProperty(ratingCalculatedKey) &&
+        //             !newTrack.hasOwnProperty(ratingCalculatedKey) &&
+        //             oldTrack.hasOwnProperty(albumRatingCalculatedKey) &&
+        //             !newTrack.hasOwnProperty(albumRatingCalculatedKey)
+        //         );
+        //     },
+        // });
 
         function getLibraryWithOtherPaths(): Readonly<ParsedLibrary> {
             const dummyLibrary = getDummyLibrary();
