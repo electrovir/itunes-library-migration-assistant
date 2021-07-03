@@ -45,8 +45,9 @@ testGroup({
                     outputType: MigrationOutput.PlistString,
                 }).plist;
 
-                const parsedLibraryFile = readLibraryFile({libraryFilePath: libraryFilePath});
                 const reParsedLibrary = readLibraryString({libraryString: outputPlist});
+
+                const parsedLibraryFile = readLibraryFile({libraryFilePath: libraryFilePath});
 
                 return equal(parsedLibraryFile, reParsedLibrary);
             },
@@ -65,9 +66,48 @@ testGroup({
                     outputType: MigrationOutput.JsonObject,
                 });
 
-                const parsedLibraryFile = readLibraryFile({libraryFilePath: libraryFilePath});
+                const reParsedMigratedLibraryFile = readLibraryFile({
+                    libraryFilePath: libraryFilePath,
+                });
 
-                return equal(parsedLibraryFile, outputObject);
+                return equal(reParsedMigratedLibraryFile, outputObject);
+            },
+        });
+
+        runTest({
+            description: 'extra track processing works',
+            expect: true,
+            test: () => {
+                const deletedProperty = 'Play Count';
+
+                const outputObject = migrateLibrary({
+                    libraryFilePath,
+                    replacePaths: [],
+                    options: {
+                        checkReplacementPaths: false,
+                    },
+                    outputType: MigrationOutput.JsonObject,
+                    extraTrackProcessing: (parsedTrack) => {
+                        const outputTrack = {...parsedTrack};
+                        if (!parsedTrack.hasOwnProperty(deletedProperty)) {
+                            throw new Error(
+                                `Original track didn't have ${deletedProperty} anyway, can't test deleting it.`,
+                            );
+                        }
+                        delete outputTrack[deletedProperty];
+                        return outputTrack;
+                    },
+                });
+
+                return Object.keys(outputObject.Tracks).every((trackKey) => {
+                    const track = outputObject.Tracks[trackKey];
+
+                    if (!track) {
+                        throw new Error(`Missing track for ${trackKey}`);
+                    }
+
+                    return !track.hasOwnProperty(deletedProperty);
+                });
             },
         });
 

@@ -9,30 +9,35 @@ export function migrateLibrary({
     replacePaths,
     outputType,
     options: rawOptions,
+    extraTrackProcessing,
 }: MigrationApiInput<MigrationOutput.JsonObject>): ParsedLibrary;
 export function migrateLibrary({
     libraryFilePath,
     replacePaths,
     outputType,
     options: rawOptions,
+    extraTrackProcessing,
 }: MigrationApiInput<MigrationOutput.WriteToFile>): {filePath: string};
 export function migrateLibrary({
     libraryFilePath,
     replacePaths,
     outputType,
     options: rawOptions,
+    extraTrackProcessing,
 }: MigrationApiInput<MigrationOutput.PlistString>): {plist: string};
 export function migrateLibrary({
     libraryFilePath,
     replacePaths,
     outputType,
     options: rawOptions,
+    extraTrackProcessing,
 }: MigrationApiInput): {filePath: string} | {plist: string} | ParsedLibrary;
 export function migrateLibrary({
     libraryFilePath,
     replacePaths,
     outputType = MigrationOutput.WriteToFile,
     options: rawOptions = defaultOptions,
+    extraTrackProcessing,
 }: MigrationApiInput): {filePath: string} | {plist: string} | ParsedLibrary {
     const options = {...defaultOptions, ...rawOptions};
 
@@ -44,6 +49,7 @@ export function migrateLibrary({
     const newLibrary = makeNewLibrary({
         oldLibrary,
         replacePaths,
+        extraTrackProcessing,
         ...options,
     });
 

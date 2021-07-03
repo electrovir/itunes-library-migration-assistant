@@ -1,5 +1,5 @@
 import {existsSync} from 'fs';
-import {InputPath, ReplacePath} from '../api/api-types';
+import {InputPath, MigrationApiInput, ReplacePath} from '../api/api-types';
 import {decodeLocation, encodeLocation} from '../augments/string';
 import {RequiredBy} from '../augments/type';
 import {LibraryMigrationError} from '../errors/library-migration-error';
@@ -13,6 +13,7 @@ export function makeNewLibrary({
     loggingEnabled = true,
     checkFiles = false,
     removeRatingComputed = false,
+    extraTrackProcessing = (track) => track,
 }: Readonly<{
     oldLibrary: Readonly<ParsedLibrary>;
     replacePaths: Readonly<Readonly<InputPath>[]>;
@@ -20,6 +21,7 @@ export function makeNewLibrary({
     loggingEnabled?: boolean;
     checkFiles?: boolean;
     removeRatingComputed?: boolean;
+    extraTrackProcessing?: MigrationApiInput['extraTrackProcessing'];
 }>): Readonly<ParsedLibrary> {
     const unreplacedPaths = new Set<string>();
     const replacePathUsage = replacePaths.map(() => 0);
@@ -117,7 +119,7 @@ export function makeNewLibrary({
             }
 
             if (!markedForDeletion) {
-                newTracks[trackKey] = rawNewTrack;
+                newTracks[trackKey] = extraTrackProcessing(rawNewTrack);
             }
 
             return newTracks;

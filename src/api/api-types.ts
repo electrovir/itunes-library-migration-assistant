@@ -1,3 +1,5 @@
+import {ParsedTrack} from '../migration/reading/parsed-types';
+
 export type ReplacePath = {
     old: string;
     new: string;
@@ -16,13 +18,13 @@ export enum MigrationOutput {
     PlistString = 'plist-string',
 }
 
-export type RunTimeOptions = {
+export interface RunTimeOptions extends Record<string, boolean> {
     validationEnabled: boolean;
     loggingEnabled: boolean;
     checkReplacementPaths: boolean;
     checkFiles: boolean;
     removeRatingComputed: boolean;
-};
+}
 
 export const defaultOptions: RunTimeOptions = {
     validationEnabled: true,
@@ -37,4 +39,5 @@ export type MigrationApiInput<OutputType extends MigrationOutput = MigrationOutp
     replacePaths: Readonly<Readonly<InputPath>[]>;
     outputType?: OutputType;
     options?: Readonly<Partial<RunTimeOptions>>;
+    extraTrackProcessing?: (updatedTrack: Readonly<ParsedTrack>) => Readonly<ParsedTrack>;
 };
