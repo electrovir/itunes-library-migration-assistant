@@ -12,12 +12,14 @@ export function makeNewLibrary({
     checkReplacementPaths = true,
     loggingEnabled = true,
     checkFiles = false,
+    setRatingCalculated = false,
 }: Readonly<{
     oldLibrary: Readonly<ParsedLibrary>;
     replacePaths: Readonly<Readonly<InputPath>[]>;
     checkReplacementPaths?: boolean;
     loggingEnabled?: boolean;
     checkFiles?: boolean;
+    setRatingCalculated?: boolean;
 }>): Readonly<ParsedLibrary> {
     const unreplacedPaths = new Set<string>();
     const replacePathUsage = replacePaths.map(() => 0);
@@ -33,8 +35,17 @@ export function makeNewLibrary({
                     `Track key "${trackKey}" didn't actually exist in the library`,
                 );
             }
+
             let rawNewTrack: ParsedTrack = {
                 ...oldTrack,
+                ...(setRatingCalculated
+                    ? {
+                          ...(oldTrack.hasOwnProperty('Rating') ? {'Rating Computed': true} : {}),
+                          ...(oldTrack.hasOwnProperty('Album Rating')
+                              ? {'Rating Computed': true}
+                              : {}),
+                      }
+                    : {}),
             };
 
             const originalLocation = rawNewTrack.Location;

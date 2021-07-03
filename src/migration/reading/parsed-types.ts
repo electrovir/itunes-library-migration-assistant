@@ -26,6 +26,7 @@ export type ParsedTrack = {
     Comments?: string;
     Compilation?: boolean;
     Composer?: string;
+    /** Age rating */
     'Content Rating'?: string;
     'Date Added': Readonly<Date>;
     'Date Modified'?: Readonly<Date>;
@@ -57,6 +58,7 @@ export type ParsedTrack = {
     Protected?: boolean;
     Purchased?: boolean;
     'Rating Computed'?: boolean;
+    /** How much you like the thing rating */
     Rating?: number;
     'Release Date'?: Readonly<Date>;
     'Sample Rate'?: number;

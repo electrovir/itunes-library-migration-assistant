@@ -21,6 +21,7 @@ export type RunTimeOptions = {
     loggingEnabled: boolean;
     checkReplacementPaths: boolean;
     checkFiles: boolean;
+    setRatingCalculated: boolean;
 };
 
 export const defaultOptions: RunTimeOptions = {
@@ -28,6 +29,7 @@ export const defaultOptions: RunTimeOptions = {
     loggingEnabled: true,
     checkReplacementPaths: true,
     checkFiles: false,
+    setRatingCalculated: false,
 } as const;
 
 export type MigrationApiInput<OutputType extends MigrationOutput = MigrationOutput> = {

@@ -9,9 +9,10 @@ testGroup({
     tests: (runTest) => {
         runTest({
             expect: true,
-            description: 'library object should not get modified when no tracks are present',
+            description: 'library object should not get modified when no replace paths are present',
             test: () => {
                 const oldLibrary = getDummyLibrary();
+
                 const newLibrary = makeNewLibrary({
                     oldLibrary,
                     replacePaths: [],
@@ -35,6 +36,49 @@ testGroup({
 
                 return (
                     !!location && location.includes('new/path') && !location.includes('sample/path')
+                );
+            },
+        });
+
+        runTest({
+            expect: true,
+            description: 'rating calculated should get set',
+            test: () => {
+                const dummyLibrary = getDummyLibrary();
+
+                const oldTrack = dummyLibrary.Tracks['0'];
+
+                if (!oldTrack) {
+                    throw new Error(`dummy track missing`);
+                }
+
+                const oldLibrary = {
+                    ...dummyLibrary,
+                    Tracks: {
+                        '0': {
+                            ...oldTrack,
+                            Rating: 100,
+                        },
+                    },
+                };
+
+                const newLibrary = makeNewLibrary({
+                    oldLibrary,
+                    replacePaths: [{old: 'sample/path', new: 'new/path'}],
+                    setRatingCalculated: true,
+                });
+
+                const newTrack = newLibrary.Tracks['0'];
+
+                if (!newTrack) {
+                    throw new Error('New track was not found');
+                }
+
+                const ratingCalculatedKey = 'Rating Computed';
+
+                return (
+                    !oldTrack.hasOwnProperty(ratingCalculatedKey) &&
+                    newTrack.hasOwnProperty(ratingCalculatedKey)
                 );
             },
         });
