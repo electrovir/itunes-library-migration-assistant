@@ -12,14 +12,14 @@ export function makeNewLibrary({
     checkReplacementPaths = true,
     loggingEnabled = true,
     checkFiles = false,
-    setRatingCalculated = false,
+    removeRatingComputed = false,
 }: Readonly<{
     oldLibrary: Readonly<ParsedLibrary>;
     replacePaths: Readonly<Readonly<InputPath>[]>;
     checkReplacementPaths?: boolean;
     loggingEnabled?: boolean;
     checkFiles?: boolean;
-    setRatingCalculated?: boolean;
+    removeRatingComputed?: boolean;
 }>): Readonly<ParsedLibrary> {
     const unreplacedPaths = new Set<string>();
     const replacePathUsage = replacePaths.map(() => 0);
@@ -38,15 +38,11 @@ export function makeNewLibrary({
 
             let rawNewTrack: ParsedTrack = {
                 ...oldTrack,
-                ...(setRatingCalculated
-                    ? {
-                          ...(oldTrack.hasOwnProperty('Rating') ? {'Rating Computed': true} : {}),
-                          ...(oldTrack.hasOwnProperty('Album Rating')
-                              ? {'Rating Computed': true}
-                              : {}),
-                      }
-                    : {}),
             };
+
+            if (removeRatingComputed) {
+                delete rawNewTrack['Rating Computed'];
+            }
 
             const originalLocation = rawNewTrack.Location;
             let markedForDeletion = false;

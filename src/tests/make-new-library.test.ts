@@ -42,30 +42,34 @@ testGroup({
 
         runTest({
             expect: true,
-            description: 'rating calculated should get set',
+            description: 'rating calculated should get removed',
             test: () => {
                 const dummyLibrary = getDummyLibrary();
+                const ratingCalculatedKey = 'Rating Computed' as const;
 
-                const oldTrack = dummyLibrary.Tracks['0'];
+                const dummyTrack = dummyLibrary.Tracks['0'];
 
-                if (!oldTrack) {
+                if (!dummyTrack) {
                     throw new Error(`dummy track missing`);
                 }
 
-                const oldLibrary = {
+                const oldTrack = {
+                    ...dummyTrack,
+                    Rating: 100,
+                    [ratingCalculatedKey]: true,
+                };
+
+                const oldLibrary: Readonly<ParsedLibrary> = {
                     ...dummyLibrary,
                     Tracks: {
-                        '0': {
-                            ...oldTrack,
-                            Rating: 100,
-                        },
+                        '0': oldTrack,
                     },
                 };
 
                 const newLibrary = makeNewLibrary({
                     oldLibrary,
                     replacePaths: [{old: 'sample/path', new: 'new/path'}],
-                    setRatingCalculated: true,
+                    removeRatingComputed: true,
                 });
 
                 const newTrack = newLibrary.Tracks['0'];
@@ -74,11 +78,9 @@ testGroup({
                     throw new Error('New track was not found');
                 }
 
-                const ratingCalculatedKey = 'Rating Computed';
-
                 return (
-                    !oldTrack.hasOwnProperty(ratingCalculatedKey) &&
-                    newTrack.hasOwnProperty(ratingCalculatedKey)
+                    oldTrack.hasOwnProperty(ratingCalculatedKey) &&
+                    !newTrack.hasOwnProperty(ratingCalculatedKey)
                 );
             },
         });
