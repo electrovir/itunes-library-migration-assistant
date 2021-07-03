@@ -42,6 +42,7 @@ export function makeNewLibrary({
 
             if (removeRatingComputed) {
                 delete rawNewTrack['Rating Computed'];
+                delete rawNewTrack['Album Rating Computed'];
             }
 
             const originalLocation = rawNewTrack.Location;

@@ -46,6 +46,7 @@ testGroup({
             test: () => {
                 const dummyLibrary = getDummyLibrary();
                 const ratingCalculatedKey = 'Rating Computed' as const;
+                const albumRatingCalculatedKey = 'Album Rating Computed' as const;
 
                 const dummyTrack = dummyLibrary.Tracks['0'];
 
@@ -57,6 +58,7 @@ testGroup({
                     ...dummyTrack,
                     Rating: 100,
                     [ratingCalculatedKey]: true,
+                    [albumRatingCalculatedKey]: true,
                 };
 
                 const oldLibrary: Readonly<ParsedLibrary> = {
@@ -80,7 +82,9 @@ testGroup({
 
                 return (
                     oldTrack.hasOwnProperty(ratingCalculatedKey) &&
-                    !newTrack.hasOwnProperty(ratingCalculatedKey)
+                    !newTrack.hasOwnProperty(ratingCalculatedKey) &&
+                    oldTrack.hasOwnProperty(albumRatingCalculatedKey) &&
+                    !newTrack.hasOwnProperty(albumRatingCalculatedKey)
                 );
             },
         });
